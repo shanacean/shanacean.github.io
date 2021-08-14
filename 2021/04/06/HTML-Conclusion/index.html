@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="HTML学习总结 一、主体框架分析HTML(Hyper Text Markup Language) 超文本标记语言，主要用于网页内容的显示，配合css, javascript食用。主体框架如下: 12345678910&lt;!DOCTYPE html&gt;&lt;html lang&#x3D;&quot;en&quot;&gt;&lt;head&gt;    &lt;meta charset&#x3D;&amp;quot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML Conclusion">
+<meta property="og:url" content="http://example.com/2021/04/06/HTML-Conclusion/index.html">
+<meta property="og:site_name" content="Shan">
+<meta property="og:description" content="HTML学习总结 一、主体框架分析HTML(Hyper Text Markup Language) 超文本标记语言，主要用于网页内容的显示，配合css, javascript食用。主体框架如下: 12345678910&lt;!DOCTYPE html&gt;&lt;html lang&#x3D;&quot;en&quot;&gt;&lt;head&gt;    &lt;meta charset&#x3D;&amp;quot">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-04-06T12:45:35.000Z">
+<meta property="article:modified_time" content="2021-04-06T13:01:15.544Z">
+<meta property="article:author" content="BY Shan">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTML Conclusion</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2021/04/06/CSS-Conclusion/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/03/31/hello-world/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/04/06/HTML-Conclusion/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/04/06/HTML-Conclusion/&text=HTML Conclusion"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/04/06/HTML-Conclusion/&is_video=false&description=HTML Conclusion"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTML Conclusion&body=Check out this article: http://example.com/2021/04/06/HTML-Conclusion/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/04/06/HTML-Conclusion/&name=HTML Conclusion&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/04/06/HTML-Conclusion/&t=HTML Conclusion"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTML%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">HTML学习总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%BB%E4%BD%93%E6%A1%86%E6%9E%B6%E5%88%86%E6%9E%90"><span class="toc-number">1.1.</span> <span class="toc-text">一、主体框架分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%96%87%E5%AD%97%E5%9F%BA%E7%A1%80"><span class="toc-number">1.2.</span> <span class="toc-text">二、文字基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-p-gt-paragraph"><span class="toc-number">1.2.1.</span> <span class="toc-text">&lt;p&gt; :    paragraph</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-h1-gt-head"><span class="toc-number">1.2.2.</span> <span class="toc-text">&lt;h1&gt;  :    head</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-ul-gt-unordered-list"><span class="toc-number">1.2.3.</span> <span class="toc-text">&lt;ul&gt; :    unordered list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-ol-gt-emsp-ordered-list"><span class="toc-number">1.2.4.</span> <span class="toc-text">&lt;ol&gt; :&amp;emsp;ordered list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-em-gt-emphasis"><span class="toc-number">1.2.5.</span> <span class="toc-text">&lt;em&gt; :    emphasis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-strong-gt-strong-importance"><span class="toc-number">1.2.6.</span> <span class="toc-text">&lt;strong&gt; :    strong importance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-dl-gt-description-list"><span class="toc-number">1.2.7.</span> <span class="toc-text">&lt;dl&gt;  :    description list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-blockquote-gt"><span class="toc-number">1.2.8.</span> <span class="toc-text">&lt;blockquote&gt;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%B6%85%E9%93%BE%E6%8E%A5"><span class="toc-number">1.3.</span> <span class="toc-text">三、超链接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-a-gt-anchor"><span class="toc-number">1.3.1.</span> <span class="toc-text">&lt;a&gt; :    anchor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%9B%BE%E7%89%87%E3%80%81%E8%A7%86%E9%A2%91"><span class="toc-number">1.4.</span> <span class="toc-text">四、图片、视频</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E8%A1%A8%E6%A0%BC"><span class="toc-number">1.5.</span> <span class="toc-text">五、表格</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-table-gt"><span class="toc-number">1.5.1.</span> <span class="toc-text">&lt;table&gt;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%A1%A8%E5%8D%95"><span class="toc-number">1.6.</span> <span class="toc-text">六、表单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-form-gt"><span class="toc-number">1.6.1.</span> <span class="toc-text">&lt;form&gt;</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        HTML Conclusion
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">BY Shan</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-04-06T12:45:35.000Z" itemprop="datePublished">2021-04-06</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="HTML学习总结"><a href="#HTML学习总结" class="headerlink" title="HTML学习总结"></a>HTML学习总结</h1><!-- toc -->
+<h2 id="一、主体框架分析"><a href="#一、主体框架分析" class="headerlink" title="一、主体框架分析"></a>一、主体框架分析</h2><p>HTML(Hyper Text Markup Language) 超文本标记语言，主要用于网页内容的显示，配合css, javascript食用。<br>主体框架如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><p><strong>&lt;head&gt;</strong><br>主要存放一些元数据，以及 title、link、script 等信息…</p>
+<ul>
+<li><strong>&lt;title&gt;</strong><pre><code>  页面标题，显示在窗口选项卡中。
+  
+</code></pre>
+<ul>
+<li>&lt;meta&gt;  具有以下属性：<ul>
+<li>name 提供文档级别元数据，应用整个页面</li>
+<li>http-euqiv 编译指令</li>
+<li>charset 字符编码设置</li>
+<li>itemprop 用户自定义元数据</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>每个 &lt;head&gt; 只能包含一个title元素</p>
+</blockquote>
+</li>
+<li><p><strong>&lt;body&gt;</strong><br>存放网页内容信息</p>
+</li>
+</ul>
+<h2 id="二、文字基础"><a href="#二、文字基础" class="headerlink" title="二、文字基础"></a>二、文字基础</h2><h3 id="lt-p-gt-paragraph"><a href="#lt-p-gt-paragraph" class="headerlink" title="&lt;p&gt; :    paragraph"></a>&lt;p&gt; :    paragraph</h3><p>段落标签，表示文本中的一个段落</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>这是一个段落！<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="lt-h1-gt-head"><a href="#lt-h1-gt-head" class="headerlink" title="&lt;h1&gt;  :    head"></a>&lt;h1&gt;  :    head</h3><p>标题标签, 级别为1-6</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>一级标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>二级标题<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="lt-ul-gt-unordered-list"><a href="#lt-ul-gt-unordered-list" class="headerlink" title="&lt;ul&gt; :    unordered list"></a>&lt;ul&gt; :    unordered list</h3><p>无序列表</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>一年级<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>二年级<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>三年级<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="lt-ol-gt-emsp-ordered-list"><a href="#lt-ol-gt-emsp-ordered-list" class="headerlink" title="&lt;ol&gt; :&emsp;ordered list"></a>&lt;ol&gt; :&emsp;ordered list</h3><p>有序列表</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>一年级<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>二年级<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>三年级<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>列表可嵌套使用</p>
+</blockquote>
+<hr>
+<h3 id="lt-em-gt-emphasis"><a href="#lt-em-gt-emphasis" class="headerlink" title="&lt;em&gt; :    emphasis"></a>&lt;em&gt; :    emphasis</h3><p>强调，斜体字符</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">    i am a <span class="tag">&lt;<span class="name">em</span>&gt;</span>man<span class="tag">&lt;/<span class="name">em</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="lt-strong-gt-strong-importance"><a href="#lt-strong-gt-strong-importance" class="headerlink" title="&lt;strong&gt; :    strong importance"></a>&lt;strong&gt; :    strong importance</h3><p>强调，粗体字</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">strong</span>&gt;</span>Hello Everyone!<span class="tag">&lt;/<span class="name">strong</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="lt-dl-gt-description-list"><a href="#lt-dl-gt-description-list" class="headerlink" title="&lt;dl&gt;  :    description list"></a>&lt;dl&gt;  :    description list</h3><p>描述列表</p>
+<ul>
+<li><p>&lt;dt&gt;     description terms</p>
+<p>描述术语</p>
+</li>
+<li><p>&lt;dd&gt;    description description </p>
+<p>描述部分</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dt</span>&gt;</span>鲁迅<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">dd</span>&gt;</span>横眉冷对千夫指，俯首甘为孺子牛。<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dt</span>&gt;</span>李白<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">dd</span>&gt;</span>高楼危百尺，手可摘星辰。<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="lt-blockquote-gt"><a href="#lt-blockquote-gt" class="headerlink" title="&lt;blockquote&gt;"></a>&lt;blockquote&gt;</h3><p>块引用，通常会进行缩进，可以将引用处URL地址设置在 ==city==上，也可以用 &lt;city&gt;元素以文本形式写出出处。</p>
+<ul>
+<li><p>&lt;q&gt; :    quote</p>
+<p>行内引用</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">blockquote</span> <span class="attr">cite</span>=<span class="string">&quot;https://www.bilibili.com/&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">q</span>&gt;</span>bilibili<span class="tag">&lt;/<span class="name">q</span>&gt;</span> is a anime video website in China.</span><br><span class="line"><span class="tag">&lt;/<span class="name">blockquote</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、超链接"><a href="#三、超链接" class="headerlink" title="三、超链接"></a>三、超链接</h2><h3 id="lt-a-gt-anchor"><a href="#lt-a-gt-anchor" class="headerlink" title="&lt;a&gt; :    anchor"></a>&lt;a&gt; :    anchor</h3><p>锚点，可以创建通向其他网页、文件、同一页面内的位置、电子邮件地址或任何其他 URL 的超链接。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//连向其他网页</span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;www.baidu.com&quot;</span> <span class="attr">titile</span>=<span class="string">&quot;百度搜索引擎站点&quot;</span>&gt;</span>Baidu wesite<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//连向文件</span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;../demo/index.html&quot;</span>&gt;</span>上级页面<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/demo/index.html&quot;</span>&gt;</span>子目录页面<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//连向同一页面位置</span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">id</span>=<span class="string">&quot;index&quot;</span>&gt;</span>书签<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#index&quot;</span>&gt;</span>返回上级<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意绝对路径，相对路径的问题。</p>
+</blockquote>
+<h2 id="四、图片、视频"><a href="#四、图片、视频" class="headerlink" title="四、图片、视频"></a>四、图片、视频</h2><ul>
+<li>添加图片</li>
+<li>图片搭配文字</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//配图</span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">href</span>=<span class="string">&quot;/images/picture.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;动漫&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//为图片搭配说明文字</span><br><span class="line"><span class="tag">&lt;<span class="name">figure</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;images/picture.png&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">figcaption</span>&gt;</span>anime girl<span class="tag">&lt;/<span class="name">figcaption</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">figure</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//添加视频</span><br><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">src</span>=<span class="string">&quot;...&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;...&quot;</span> <span class="attr">type</span>=<span class="string">&quot;...&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、表格"><a href="#五、表格" class="headerlink" title="五、表格"></a>五、表格</h2><h3 id="lt-table-gt"><a href="#lt-table-gt" class="headerlink" title="&lt;table&gt;"></a>&lt;table&gt;</h3><ul>
+<li>&lt;tr&gt;    table row</li>
+<li>&lt;th&gt;   table head</li>
+<li>&lt;td&gt;   table data</li>
+<li>&lt;col&gt; column</li>
+<li>&lt;clogroup&gt; column group</li>
+<li>&lt;caption&gt; </li>
+</ul>
+<blockquote>
+<p>colgroup 给表格中的一组colunm设置格式</p>
+<p>col为span选中的列设置格式</p>
+<p>caption为表格添加标题</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">&quot;1&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">colgroup</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">col</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">col</span> <span class="attr">style</span>=<span class="string">&quot;background-color: brown;&quot;</span> <span class="attr">span</span>=<span class="string">&quot;1&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">colgroup</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">th</span>&gt;</span>Day1<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">th</span>&gt;</span>Day2<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">td</span>&gt;</span>Orange<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">td</span>&gt;</span>Apple<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">td</span>&gt;</span>Peach<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">td</span>&gt;</span>Banana<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、表单"><a href="#六、表单" class="headerlink" title="六、表单"></a>六、表单</h2><h3 id="lt-form-gt"><a href="#lt-form-gt" class="headerlink" title="&lt;form&gt;"></a>&lt;form&gt;</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">label</span>&gt;</span>账号：   <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;请输入账号&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">label</span>&gt;</span>密码：   <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;请输入密码&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Submit&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;reset&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Reset&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTML%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">HTML学习总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%BB%E4%BD%93%E6%A1%86%E6%9E%B6%E5%88%86%E6%9E%90"><span class="toc-number">1.1.</span> <span class="toc-text">一、主体框架分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%96%87%E5%AD%97%E5%9F%BA%E7%A1%80"><span class="toc-number">1.2.</span> <span class="toc-text">二、文字基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-p-gt-paragraph"><span class="toc-number">1.2.1.</span> <span class="toc-text">&lt;p&gt; :    paragraph</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-h1-gt-head"><span class="toc-number">1.2.2.</span> <span class="toc-text">&lt;h1&gt;  :    head</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-ul-gt-unordered-list"><span class="toc-number">1.2.3.</span> <span class="toc-text">&lt;ul&gt; :    unordered list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-ol-gt-emsp-ordered-list"><span class="toc-number">1.2.4.</span> <span class="toc-text">&lt;ol&gt; :&amp;emsp;ordered list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-em-gt-emphasis"><span class="toc-number">1.2.5.</span> <span class="toc-text">&lt;em&gt; :    emphasis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-strong-gt-strong-importance"><span class="toc-number">1.2.6.</span> <span class="toc-text">&lt;strong&gt; :    strong importance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-dl-gt-description-list"><span class="toc-number">1.2.7.</span> <span class="toc-text">&lt;dl&gt;  :    description list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-blockquote-gt"><span class="toc-number">1.2.8.</span> <span class="toc-text">&lt;blockquote&gt;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%B6%85%E9%93%BE%E6%8E%A5"><span class="toc-number">1.3.</span> <span class="toc-text">三、超链接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-a-gt-anchor"><span class="toc-number">1.3.1.</span> <span class="toc-text">&lt;a&gt; :    anchor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%9B%BE%E7%89%87%E3%80%81%E8%A7%86%E9%A2%91"><span class="toc-number">1.4.</span> <span class="toc-text">四、图片、视频</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E8%A1%A8%E6%A0%BC"><span class="toc-number">1.5.</span> <span class="toc-text">五、表格</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-table-gt"><span class="toc-number">1.5.1.</span> <span class="toc-text">&lt;table&gt;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%A1%A8%E5%8D%95"><span class="toc-number">1.6.</span> <span class="toc-text">六、表单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-form-gt"><span class="toc-number">1.6.1.</span> <span class="toc-text">&lt;form&gt;</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/04/06/HTML-Conclusion/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/04/06/HTML-Conclusion/&text=HTML Conclusion"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/04/06/HTML-Conclusion/&is_video=false&description=HTML Conclusion"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTML Conclusion&body=Check out this article: http://example.com/2021/04/06/HTML-Conclusion/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/04/06/HTML-Conclusion/&title=HTML Conclusion"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/04/06/HTML-Conclusion/&name=HTML Conclusion&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/04/06/HTML-Conclusion/&t=HTML Conclusion"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    BY Shan
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
