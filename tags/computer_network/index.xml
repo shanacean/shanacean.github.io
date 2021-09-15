@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>computer_network on Bangyang Shan</title>
+    <link>http://example.org/tags/computer_network/</link>
+    <description>Recent content in computer_network on Bangyang Shan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 15 Sep 2021 14:16:58 +0800</lastBuildDate><atom:link href="http://example.org/tags/computer_network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ipconfig_ping</title>
+      <link>http://example.org/notes/ipconfig_ping/</link>
+      <pubDate>Wed, 15 Sep 2021 14:16:58 +0800</pubDate>
+      
+      <guid>http://example.org/notes/ipconfig_ping/</guid>
+      <description>Ipconfig  /all 显示所有适配器的完整 TCP/IP 配置。 /flushdns 刷新和重置 DNS 客户端解析程序缓存的内容。  实作一  DHCP(Dynamic Host Configuration Protocol)
+ 用于内部网或网络服务供应商自动分配IP地址给用户 用于内部网管理员对所有电脑作中央管理  Subnet Mask
+ 用来指明一个IP地址的哪些位标识的是主机所在的网络地址以及哪些位标识的是主机地址的位掩码。  Gateway
+ 网关（gateway）能在不同协议间移动资料，而路由器（router）是在不同网络间移动资料，相当于传统所说的IP网关（IP gateway）。   实作二 Ping  TTL time to live time 往返时间  </description>
+    </item>
+    
+  </channel>
+</rss>
