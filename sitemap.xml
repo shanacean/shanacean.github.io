@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://example.org/tags/computer_network/</loc>
+    <loc>https://shanacean.github.io/tags/computer_network/</loc>
     <lastmod>2021-09-15T14:16:58+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/notes/ipconfig_ping/</loc>
+    <loc>https://shanacean.github.io/notes/ipconfig_ping/</loc>
     <lastmod>2021-09-15T14:16:58+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/notes/</loc>
+    <loc>https://shanacean.github.io/notes/</loc>
     <lastmod>2021-09-15T14:16:58+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://shanacean.github.io/tags/</loc>
     <lastmod>2021-09-15T14:16:58+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/reading/</loc>
+    <loc>https://shanacean.github.io/reading/</loc>
     <lastmod>2021-08-27T22:08:24+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/</loc>
+    <loc>https://shanacean.github.io/</loc>
     <lastmod>2021-08-27T20:47:31+08:00</lastmod>
   </url>
 </urlset>

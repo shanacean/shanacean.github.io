@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Bangyang Shan</title>
-    <link>http://example.org/tags/</link>
+    <link>https://shanacean.github.io/tags/</link>
     <description>Recent content in Tags on Bangyang Shan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 15 Sep 2021 14:16:58 +0800</lastBuildDate><atom:link href="http://example.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 15 Sep 2021 14:16:58 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>computer_network</title>
-      <link>http://example.org/tags/computer_network/</link>
+      <link>https://shanacean.github.io/tags/computer_network/</link>
       <pubDate>Wed, 15 Sep 2021 14:16:58 +0800</pubDate>
       
-      <guid>http://example.org/tags/computer_network/</guid>
+      <guid>https://shanacean.github.io/tags/computer_network/</guid>
       <description></description>
     </item>
     
