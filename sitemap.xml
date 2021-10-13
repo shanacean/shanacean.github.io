@@ -2,16 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://shanacean.github.io/notes/</loc>
+    <lastmod>2021-09-19T10:51:17+08:00</lastmod>
+  </url><url>
+    <loc>https://shanacean.github.io/tags/system/</loc>
+    <lastmod>2021-09-19T10:51:17+08:00</lastmod>
+  </url><url>
+    <loc>https://shanacean.github.io/tags/</loc>
+    <lastmod>2021-09-19T10:51:17+08:00</lastmod>
+  </url><url>
+    <loc>https://shanacean.github.io/notes/tlpi/</loc>
+    <lastmod>2021-09-19T10:51:17+08:00</lastmod>
+  </url><url>
     <loc>https://shanacean.github.io/tags/computer_network/</loc>
     <lastmod>2021-09-15T14:16:58+08:00</lastmod>
   </url><url>
     <loc>https://shanacean.github.io/notes/ipconfig_ping/</loc>
-    <lastmod>2021-09-15T14:16:58+08:00</lastmod>
-  </url><url>
-    <loc>https://shanacean.github.io/notes/</loc>
-    <lastmod>2021-09-15T14:16:58+08:00</lastmod>
-  </url><url>
-    <loc>https://shanacean.github.io/tags/</loc>
     <lastmod>2021-09-15T14:16:58+08:00</lastmod>
   </url><url>
     <loc>https://shanacean.github.io/reading/</loc>

@@ -13,10 +13,17 @@
       <pubDate>Wed, 15 Sep 2021 14:16:58 +0800</pubDate>
       
       <guid>https://shanacean.github.io/notes/ipconfig_ping/</guid>
-      <description>Ipconfig  /all 显示所有适配器的完整 TCP/IP 配置。 /flushdns 刷新和重置 DNS 客户端解析程序缓存的内容。  实作一  DHCP(Dynamic Host Configuration Protocol)
+      <description>Ipconfig  /all 显示所有适配器的完整 TCP/IP 配置。 /flushdns 刷新和重置 DNS 客户端解析程序缓存的内容。  实作一
+DHCP(Dynamic Host Configuration Protocol)
  用于内部网或网络服务供应商自动分配IP地址给用户 用于内部网管理员对所有电脑作中央管理  Subnet Mask
  用来指明一个IP地址的哪些位标识的是主机所在的网络地址以及哪些位标识的是主机地址的位掩码。  Gateway
- 网关（gateway）能在不同协议间移动资料，而路由器（router）是在不同网络间移动资料，相当于传统所说的IP网关（IP gateway）。   实作二 Ping  TTL time to live time 往返时间  </description>
+ 网关（gateway）能在不同协议间移动资料，而路由器（router）是在不同网络间移动资料，相当于传统所说的IP网关（IP gateway）。   实作二
+Todo:
+ Ping  TTL time to live time 往返时间    ping www.baidu.com域名失败原因可能为域名解析失败，解决方法：
+ 清除dns缓存 ipconfig/flushdns 重启网卡 service network restart 或修改host文件添加映射ip-域名映射    Tracert Trace Route
+实作一
+ question1
+tracert通过TTL实现，每经过一个路由器，TTL - 1，直到为0时返回，而后主机再将TTL + 1发送，···直到到达目的地结束。how tracert works question2</description>
     </item>
     
   </channel>

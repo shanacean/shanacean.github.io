@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Tags</title>
+    <title>Tlpi</title>
     <meta name="description" content="A simple monospaced resume theme for Hugo.">
     <meta name="author" content='Bangyang Shan'>
 
@@ -22,7 +22,6 @@
 
     
 
-    <link rel="alternate" type="application/rss+xml" href="https://shanacean.github.io/tags/index.xml" title="Bangyang Shan" />
     
         
     
@@ -71,30 +70,22 @@
 <hr>
 <div id="content">
 <div class="container">
-  
-  
-  
-  <h1>
-    <a href="/tags/computer_network/">computer_network</a>
-  </h1>
-  <ul>
-    
-    <li><a href="https://shanacean.github.io/notes/ipconfig_ping/">Ipconfig_ping</a></li>
-    
-    
-  </ul>
-  
-  
-  <h1>
-    <a href="/tags/system/">system</a>
-  </h1>
-  <ul>
-    
-    <li><a href="https://shanacean.github.io/notes/tlpi/">Tlpi</a></li>
-    
-    
-  </ul>
-  
+    <h3 id="chapter5-深入探究文件io">Chapter5 深入探究文件IO</h3>
+<h3 id="51-race-conditions">5.1 race conditions</h3>
+<p>操作共享资源的两个进程（或线程），其结果取决于一个无法预期的顺序，即这些进程(线程)获得 CPU 使用权的先后相对顺序。例如两个进程同时向一个文件尾部添加数据。</p>
+<blockquote>
+<p>所有系统调用都是以原子操作方式执行的。内核保证了某系统调用中的所有步骤会作为独立操作而一次性加以执行，期间不会为其他进程或线程所中断。</p>
+</blockquote>
+<h3 id="52-3-fcntl">5.2-3 fcntl</h3>
+<p>使用fcntl(int fd, int cmd, &hellip;)获取修改访问模式和状态模式。</p>
+<p>cmd</p>
+<ul>
+<li>F_SETFL 更新状态标志</li>
+<li>F_GETFL 获取当前标志副本</li>
+</ul>
+<h3 id="54-relationship-between-file-descriptors-and-open-files">5.4 Relationship Between File Descriptors and Open Files</h3>
+<p><img src="/system/tlpi/chapter5-2.jpg" alt="fd-f"></p>
+
 </div>
 
         </div><div id="footer" class="mb-5">
