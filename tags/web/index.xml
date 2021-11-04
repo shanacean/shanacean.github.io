@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>web on Bangyang Shan</title>
-    <link>shanacean.github.io/tags/web/</link>
+    <link>https://shanacean.github.io/tags/web/</link>
     <description>Recent content in web on Bangyang Shan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Jun 2021 15:17:33 +0800</lastBuildDate><atom:link href="shanacean.github.io/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Jun 2021 15:17:33 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/tags/web/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Reader Dev</title>
-      <link>shanacean.github.io/notes/reader_dev/</link>
+      <link>https://shanacean.github.io/notes/reader_dev/</link>
       <pubDate>Fri, 04 Jun 2021 15:17:33 +0800</pubDate>
       
-      <guid>shanacean.github.io/notes/reader_dev/</guid>
+      <guid>https://shanacean.github.io/notes/reader_dev/</guid>
       <description>Reader Dev ​	在之前学习flutter过程中，经常查阅Dart pub中的packages，便想到利用相同的形式做一个分享书籍的Web应用，无须注册，可以进行匿名的发布、修改润色他人分享的推书卡片，当然也可以进行删除。目前只开发了增删改查的工作，打星、评论的功能也会后续增加。
  一、开发过程 1.1 开发技术 使用了前后端分离技术，前端采用Vue3框架、后端采用SpringBoot2。
 UI框架：TailwindCSS、ElementPlus

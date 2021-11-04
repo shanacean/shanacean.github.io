@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>go on Bangyang Shan</title>
-    <link>shanacean.github.io/tags/go/</link>
+    <link>https://shanacean.github.io/tags/go/</link>
     <description>Recent content in go on Bangyang Shan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 12 Aug 2021 09:04:21 +0800</lastBuildDate><atom:link href="shanacean.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 12 Aug 2021 09:04:21 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Interfaces</title>
-      <link>shanacean.github.io/notes/interfaces/</link>
+      <link>https://shanacean.github.io/notes/interfaces/</link>
       <pubDate>Thu, 12 Aug 2021 09:04:21 +0800</pubDate>
       
-      <guid>shanacean.github.io/notes/interfaces/</guid>
+      <guid>https://shanacean.github.io/notes/interfaces/</guid>
       <description>使用net/http包中handler时，handler的函数签名为func(ResponseWriter, *Request)，分别为传值和指针。在SO上找到了相关问题:
 [In Go HTTP handlers, why is the ResponseWriter a value but the Request a pointer?]
 ResponseWriter是一个interface，而request是一个具体的struct。
