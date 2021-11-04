@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>system on Bangyang Shan</title>
-    <link>https://shanacean.github.io/tags/system/</link>
+    <link>shanacean.github.io/tags/system/</link>
     <description>Recent content in system on Bangyang Shan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 Sep 2021 10:51:17 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/tags/system/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Sep 2021 10:51:17 +0800</lastBuildDate><atom:link href="shanacean.github.io/tags/system/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Tlpi</title>
-      <link>https://shanacean.github.io/notes/tlpi/</link>
+      <link>shanacean.github.io/notes/tlpi/</link>
       <pubDate>Sun, 19 Sep 2021 10:51:17 +0800</pubDate>
       
-      <guid>https://shanacean.github.io/notes/tlpi/</guid>
+      <guid>shanacean.github.io/notes/tlpi/</guid>
       <description>Chapter5 深入探究文件IO 5.1 race conditions 操作共享资源的两个进程（或线程），其结果取决于一个无法预期的顺序，即这些进程(线程)获得 CPU 使用权的先后相对顺序。例如两个进程同时向一个文件尾部添加数据。
  所有系统调用都是以原子操作方式执行的。内核保证了某系统调用中的所有步骤会作为独立操作而一次性加以执行，期间不会为其他进程或线程所中断。
  5.2-3 fcntl 使用fcntl(int fd, int cmd, &amp;hellip;)获取修改访问模式和状态模式。

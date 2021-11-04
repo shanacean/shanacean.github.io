@@ -2,46 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://shanacean.github.io/notes/concurrency/</loc>
+    <loc>shanacean.github.io/notes/concurrency/</loc>
     <lastmod>2021-10-21T13:18:43+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/notes/</loc>
+    <loc>shanacean.github.io/notes/</loc>
     <lastmod>2021-10-21T13:18:43+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/tags/sys/</loc>
+    <loc>shanacean.github.io/tags/sys/</loc>
     <lastmod>2021-10-21T13:18:43+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/tags/</loc>
+    <loc>shanacean.github.io/tags/</loc>
     <lastmod>2021-10-21T13:18:43+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/tags/system/</loc>
+    <loc>shanacean.github.io/tags/system/</loc>
     <lastmod>2021-09-19T10:51:17+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/notes/tlpi/</loc>
+    <loc>shanacean.github.io/notes/tlpi/</loc>
     <lastmod>2021-09-19T10:51:17+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/tags/computer_network/</loc>
+    <loc>shanacean.github.io/tags/computer_network/</loc>
     <lastmod>2021-09-15T14:16:58+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/notes/ipconfig_ping/</loc>
+    <loc>shanacean.github.io/notes/ipconfig_ping/</loc>
     <lastmod>2021-09-15T14:16:58+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/reading/</loc>
+    <loc>shanacean.github.io/reading/</loc>
     <lastmod>2021-08-27T22:08:24+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/</loc>
+    <loc>shanacean.github.io/</loc>
     <lastmod>2021-08-27T20:47:31+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/tags/go/</loc>
+    <loc>shanacean.github.io/tags/go/</loc>
     <lastmod>2021-08-12T09:04:21+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/notes/interfaces/</loc>
+    <loc>shanacean.github.io/notes/interfaces/</loc>
     <lastmod>2021-08-12T09:04:21+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/notes/reader_dev/</loc>
+    <loc>shanacean.github.io/notes/reader_dev/</loc>
     <lastmod>2021-06-04T15:17:33+08:00</lastmod>
   </url><url>
-    <loc>https://shanacean.github.io/tags/web/</loc>
+    <loc>shanacean.github.io/tags/web/</loc>
     <lastmod>2021-06-04T15:17:33+08:00</lastmod>
   </url>
 </urlset>

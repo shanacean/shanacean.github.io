@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Bangyang Shan</title>
-    <link>https://shanacean.github.io/</link>
+    <link>shanacean.github.io/</link>
     <description>Recent content on Bangyang Shan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Aug 2021 20:47:31 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 27 Aug 2021 20:47:31 +0800</lastBuildDate><atom:link href="shanacean.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Concurrency</title>
-      <link>https://shanacean.github.io/notes/concurrency/</link>
+      <link>shanacean.github.io/notes/concurrency/</link>
       <pubDate>Thu, 21 Oct 2021 13:18:43 +0800</pubDate>
       
-      <guid>https://shanacean.github.io/notes/concurrency/</guid>
+      <guid>shanacean.github.io/notes/concurrency/</guid>
       <description>Concurency 4个重要概念:
  A critical section is a piece of code that accesses a shared resource, usually a variable or data structure. A race condition (or data race [NM92]) arises if multiple threads of execution enter the critical section at roughly the same time; both attempt to update the shared data structure, leading to a surprising (and perhaps undesirable) outcome. An indeterminate program consists of one or more race conditions; the output of the program varies from run to run, depending on which threads ran when.</description>
     </item>
     
     <item>
       <title>Tlpi</title>
-      <link>https://shanacean.github.io/notes/tlpi/</link>
+      <link>shanacean.github.io/notes/tlpi/</link>
       <pubDate>Sun, 19 Sep 2021 10:51:17 +0800</pubDate>
       
-      <guid>https://shanacean.github.io/notes/tlpi/</guid>
+      <guid>shanacean.github.io/notes/tlpi/</guid>
       <description>Chapter5 深入探究文件IO 5.1 race conditions 操作共享资源的两个进程（或线程），其结果取决于一个无法预期的顺序，即这些进程(线程)获得 CPU 使用权的先后相对顺序。例如两个进程同时向一个文件尾部添加数据。
  所有系统调用都是以原子操作方式执行的。内核保证了某系统调用中的所有步骤会作为独立操作而一次性加以执行，期间不会为其他进程或线程所中断。
  5.2-3 fcntl 使用fcntl(int fd, int cmd, &amp;hellip;)获取修改访问模式和状态模式。
@@ -32,10 +32,10 @@ cmd
     
     <item>
       <title>Ipconfig_ping</title>
-      <link>https://shanacean.github.io/notes/ipconfig_ping/</link>
+      <link>shanacean.github.io/notes/ipconfig_ping/</link>
       <pubDate>Wed, 15 Sep 2021 14:16:58 +0800</pubDate>
       
-      <guid>https://shanacean.github.io/notes/ipconfig_ping/</guid>
+      <guid>shanacean.github.io/notes/ipconfig_ping/</guid>
       <description>Ipconfig  /all 显示所有适配器的完整 TCP/IP 配置。 /flushdns 刷新和重置 DNS 客户端解析程序缓存的内容。  实作一
 DHCP(Dynamic Host Configuration Protocol)
  用于内部网或网络服务供应商自动分配IP地址给用户 用于内部网管理员对所有电脑作中央管理  Subnet Mask
@@ -51,10 +51,10 @@ tracert通过TTL实现，每经过一个路由器，TTL - 1，直到为0时返�
     
     <item>
       <title>Reading</title>
-      <link>https://shanacean.github.io/reading/</link>
+      <link>shanacean.github.io/reading/</link>
       <pubDate>Fri, 27 Aug 2021 22:08:24 +0800</pubDate>
       
-      <guid>https://shanacean.github.io/reading/</guid>
+      <guid>shanacean.github.io/reading/</guid>
       <description>Computer Science ➡️ Computer Systems: A Programmer&amp;rsquo;s Perspective
 ➡️ Operating System: Three Easy Pieces
 ➡️ Computer Networking：A Top-Down Approach，Seventh Edition
@@ -64,10 +64,10 @@ Finished ✔️ The C programming language</description>
     
     <item>
       <title>Interfaces</title>
-      <link>https://shanacean.github.io/notes/interfaces/</link>
+      <link>shanacean.github.io/notes/interfaces/</link>
       <pubDate>Thu, 12 Aug 2021 09:04:21 +0800</pubDate>
       
-      <guid>https://shanacean.github.io/notes/interfaces/</guid>
+      <guid>shanacean.github.io/notes/interfaces/</guid>
       <description>使用net/http包中handler时，handler的函数签名为func(ResponseWriter, *Request)，分别为传值和指针。在SO上找到了相关问题:
 [In Go HTTP handlers, why is the ResponseWriter a value but the Request a pointer?]
 ResponseWriter是一个interface，而request是一个具体的struct。
@@ -80,10 +80,10 @@ type SomeInterface interface { sayHello() } func doSomething(i *SomeInterface) {
     
     <item>
       <title>Reader Dev</title>
-      <link>https://shanacean.github.io/notes/reader_dev/</link>
+      <link>shanacean.github.io/notes/reader_dev/</link>
       <pubDate>Fri, 04 Jun 2021 15:17:33 +0800</pubDate>
       
-      <guid>https://shanacean.github.io/notes/reader_dev/</guid>
+      <guid>shanacean.github.io/notes/reader_dev/</guid>
       <description>Reader Dev ​	在之前学习flutter过程中，经常查阅Dart pub中的packages，便想到利用相同的形式做一个分享书籍的Web应用，无须注册，可以进行匿名的发布、修改润色他人分享的推书卡片，当然也可以进行删除。目前只开发了增删改查的工作，打星、评论的功能也会后续增加。
  一、开发过程 1.1 开发技术 使用了前后端分离技术，前端采用Vue3框架、后端采用SpringBoot2。
 UI框架：TailwindCSS、ElementPlus
