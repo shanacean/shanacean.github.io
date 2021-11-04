@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang=""><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Reader Dev</title>
+    <meta name="description" content="A simple monospaced resume theme for Hugo.">
+    <meta name="author" content='Bangyang Shan'>
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous">
+    
+    
+    
+    
+
+    
+    <link rel="stylesheet" href="/sass/researcher.min.css">
+
+    
+
+    
+        
+    
+</head>
+
+    <body><div class="container mt-5">
+    <nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
+        <a class="navbar-brand mx-0 mr-sm-auto" href="https://shanacean.github.io/" title="Bangyang Shan">
+          
+          Bangyang Shan
+        </a>
+        <div class="navbar-nav flex-row flex-wrap justify-content-center">
+            
+                
+                
+                    <a class="nav-item nav-link" href="/" title="About">
+                        About
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/notes" title="Notes">
+                        Notes
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/reading" title="Reading">
+                        Reading
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/tags" title="Tags">
+                        Tags
+                    </a>
+                    
+                
+            
+        </div>
+    </nav>
+</div>
+<hr>
+<div id="content">
+<div class="container">
+    <h1 id="reader-dev">Reader Dev</h1>
+<p>​	在之前学习flutter过程中，经常查阅Dart pub中的packages，便想到利用相同的形式做一个分享书籍的Web应用，无须注册，可以进行匿名的发布、修改润色他人分享的推书卡片，当然也可以进行删除。目前只开发了增删改查的工作，打星、评论的功能也会后续增加。</p>
+<hr>
+<h2 id="一开发过程">一、开发过程</h2>
+<h3 id="11-开发技术">1.1 开发技术</h3>
+<p>使用了前后端分离技术，前端采用Vue3框架、后端采用SpringBoot2。</p>
+<p>UI框架：TailwindCSS、ElementPlus</p>
+<blockquote>
+<p>==TailwindCss==相比Boostrap更具自定义性，更能理解每一步做了什么，比纯css更方便。</p>
+</blockquote>
+<h3 id="12项目部署">1.2	项目部署</h3>
+<p>利用腾讯云学生云服务器，学习了linux + docker的部署方式。</p>
+<p>整个项目部署在三个docker容器中，分别对应着前端、后端和数据库。</p>
+<p><img src="/web/docker.png" alt="docker图片"></p>
+<h3 id="13在学习过程中使用的参考资料">1.3	在学习过程中使用的参考资料</h3>
+<p><a href="https://vue3js.cn/docs/zh/">Vue3中文文档</a></p>
+<p><a href="https://blog.didispace.com/spring-boot-learning-21-1-1/">SpringBoot2教程</a></p>
+<p><a href="https://tailwindcss.com/docs">Tailwindcss</a></p>
+<p><a href="https://element-plus.gitee.io/#/zh-CN">ElementPlus</a></p>
+<p><a href="https://juejin.cn/post/6844903837774397447#heading-7">docker部署vue项目</a></p>
+<hr>
+<h2 id="二项目过程中的问题解决">二、项目过程中的问题解决</h2>
+<h3 id="21前端方面">2.1	前端方面</h3>
+<ul>
+<li>
+<p>vue 组件间相互通信问题</p>
+<p>项目过程中的例子：</p>
+<p>1、父组件调用子组件函数</p>
+<p>在项目中存在父组件AddForm.vue 和 UploadImage.vue 两个组件。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="color:#75715e">//子组件UploadImage.vue中
+</span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">el-upload</span> <span style="color:#a6e22e">ref</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;upload&#34;</span>&gt;...&lt;<span style="color:#f92672">el-upload</span>&gt;
+
+<span style="color:#75715e">//父组件AddForm.vue中
+</span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">upload-image</span> <span style="color:#f92672">@onLoadImage</span><span style="color:#e6db74">=&#34;getImageUrl&#34;</span> <span style="color:#a6e22e">ref</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;upload&#34;</span>&gt;<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/upload-image&gt;</span>
+
+<span style="color:#75715e">//表单提交后调用子组件中的clearImage()清除图片
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">$refs</span>.<span style="color:#a6e22e">upload</span>.<span style="color:#a6e22e">clearImage</span>();
+</code></pre></div><blockquote>
+<p>ref特性就是为元素或子组件赋予一个ID引用, 父组件中通过this.$refs.refName来访问元素或子组件的实例</p>
+</blockquote>
+<p>2、子组件向父组件传值</p>
+<p>子组件通过 emit 传送</p>
+<p>父组件使用 v-on 来绑定接收</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">//子组件中
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">handleSuccess</span>(<span style="color:#a6e22e">response</span>) {
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">url</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">response</span>
+    <span style="color:#75715e">//传递上传后返回的图片的链接地址
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">$emit</span>(<span style="color:#e6db74">&#34;onLoadImage&#34;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">url</span>);
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">$message</span>.<span style="color:#a6e22e">warning</span>(<span style="color:#e6db74">&#39;图片上传成功&#39;</span>)
+}
+
+<span style="color:#75715e">//父组件中
+</span><span style="color:#75715e"></span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">upload</span><span style="color:#f92672">-</span><span style="color:#a6e22e">image</span> <span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">onLoadImage</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;getImageUrl&#34;</span> <span style="color:#a6e22e">ref</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;upload&#34;</span> <span style="color:#f92672">/&gt;</span>
+
+<span style="color:#a6e22e">getImageUrl</span>(<span style="color:#a6e22e">url</span>) {
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;getImageUrl&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">url</span>);
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">form</span>.<span style="color:#a6e22e">cover</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">url</span>;
+},
+</code></pre></div></li>
+<li>
+<p>axio全局设置</p>
+<p>在 main.js 中加入如下代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">axios</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;axios&#39;</span>
+<span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">globalProperties</span>.<span style="color:#a6e22e">$axios</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">axios</span>
+<span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">defaults</span>.<span style="color:#a6e22e">baseURL</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://服务器公网地址/api&#39;</span>
+</code></pre></div></li>
+<li>
+<p>vue cli 打包后页面空白，检查元素出现：Failed to load resource: net::ERR_FILE_NOT_FOUND 问题</p>
+<p>在根目录创建vue.config.js并加入如下代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
+    <span style="color:#75715e">//打包路径
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">publicPath</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;./&#39;</span>
+}
+</code></pre></div></li>
+<li>
+<p>书籍推荐中的概要在html中显示时无法换行和空格问题</p>
+<p>使用 ==pre== 标签</p>
+<p>该标签可定义预格式化的文本，被包围在 pre 元素中的文本通常会保留空格和换行符，并且文本会呈现为等宽字体。</p>
+</li>
+</ul>
+<h3 id="22---后端方面">2.2   后端方面</h3>
+<ul>
+<li>如何上传图片至服务器</li>
+</ul>
+<p>ElementPlus中在<el-upload>组件中提供了action属性，只要绑定上传后端对应api即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">  &lt;<span style="color:#f92672">el-upload</span>
+    <span style="color:#a6e22e">ref</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;upload&#34;</span>
+    <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://ip:post/api/covers&#34;</span>
+    <span style="color:#f92672">:on-preview</span><span style="color:#e6db74">=&#34;handlePreview&#34;</span>
+    <span style="color:#f92672">:on-remove</span><span style="color:#e6db74">=&#34;handleRemove&#34;</span>
+    <span style="color:#f92672">:on-success</span><span style="color:#e6db74">=&#34;handleSuccess&#34;</span>
+    <span style="color:#f92672">:before-upload</span><span style="color:#e6db74">=&#34;beforImageUpload&#34;</span>
+    <span style="color:#f92672">:file-list</span><span style="color:#e6db74">=&#34;fileList&#34;</span>
+    <span style="color:#a6e22e">list</span><span style="color:#f92672">-type</span><span style="color:#960050;background-color:#1e0010">=&#34;</span><span style="color:#a6e22e">picture</span><span style="color:#960050;background-color:#1e0010">&#34;</span>
+  &gt;
+</code></pre></div><p>给上传的文件重命名以日期时间为前缀放置在/home/ubuntu/readerdev/imgs文件夹下，并返回给前端url地址。此时页面可以响应显示刚才上传的图片成功。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@CrossOrigin</span>
+<span style="color:#a6e22e">@PostMapping</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;api/covers&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">returnUploadCoverUrl</span><span style="color:#f92672">(</span>MultipartFile file<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    String fileName <span style="color:#f92672">=</span> file<span style="color:#f92672">.</span><span style="color:#a6e22e">getOriginalFilename</span><span style="color:#f92672">();</span>
+    String destFolder <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/home/ubuntu/readerdev/imgs&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">assert</span> fileName <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    String suffixName <span style="color:#f92672">=</span> fileName<span style="color:#f92672">.</span><span style="color:#a6e22e">substring</span><span style="color:#f92672">(</span>fileName<span style="color:#f92672">.</span><span style="color:#a6e22e">lastIndexOf</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;.&#34;</span><span style="color:#f92672">));</span>
+    SimpleDateFormat sdf <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SimpleDateFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;yyyyMMdd_HHmmSS&#34;</span><span style="color:#f92672">);</span>
+    Random random <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Random<span style="color:#f92672">();</span>
+    String tempName <span style="color:#f92672">=</span> sdf<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Date<span style="color:#f92672">())</span> <span style="color:#f92672">+</span> random<span style="color:#f92672">.</span><span style="color:#a6e22e">nextInt</span><span style="color:#f92672">(</span>100<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> suffixName<span style="color:#f92672">;</span>
+    File tempFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> File<span style="color:#f92672">(</span>destFolder<span style="color:#f92672">,</span> tempName<span style="color:#f92672">);</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>tempFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getParentFile</span><span style="color:#f92672">().</span><span style="color:#a6e22e">exists</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+        tempFile<span style="color:#f92672">.</span><span style="color:#a6e22e">mkdirs</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        file<span style="color:#f92672">.</span><span style="color:#a6e22e">transferTo</span><span style="color:#f92672">(</span>tempFile<span style="color:#f92672">);</span>
+        String url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://ip:port/api/file/&#34;</span> <span style="color:#f92672">+</span> tempFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">return</span> url<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h3 id="23项目部署问题">2.3	项目部署问题</h3>
+<h4 id="231nginxconf配置方案">2.3.1	nginx.conf配置方案</h4>
+<p>开启了gzip压缩，同时需要在前端项目中配置gzip压缩。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 开启gzip</span>
+gzip on;
+
+<span style="color:#75715e"># 启用gzip压缩的最小文件，小于设置值的文件将不会压缩</span>
+gzip_min_length 1k;
+
+<span style="color:#75715e"># gzip 压缩级别，1-9，数字越大压缩的越好，也越占用CPU时间，后面会有详细说明</span>
+gzip_comp_level 2;
+
+<span style="color:#75715e"># 进行压缩的文件类型。javascript有多种形式，后面的图片压缩不需要的可以自行删除</span>
+gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+
+<span style="color:#75715e"># 是否在http header中添加Vary: Accept-Encoding，建议开启</span>
+gzip_vary on;
+
+<span style="color:#75715e"># 设置压缩所需要的缓冲区大小     </span>
+gzip_buffers <span style="color:#ae81ff">4</span> 16k;
+server <span style="color:#f92672">{</span>
+    listen       80;
+    server_name  localhost;
+
+    <span style="color:#75715e">#charset koi8-r;</span>
+    access_log  /var/log/nginx/host.access.log  main;
+    error_log  /var/log/nginx/error.log  error;
+
+    location / <span style="color:#f92672">{</span>
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#75715e">#error_page  404              /404.html;</span>
+
+    <span style="color:#75715e"># redirect server error pages to the static page /50x.html</span>
+    <span style="color:#75715e">#</span>
+    error_page   <span style="color:#ae81ff">500</span> <span style="color:#ae81ff">502</span> <span style="color:#ae81ff">503</span> <span style="color:#ae81ff">504</span>  /50x.html;
+    location <span style="color:#f92672">=</span> /50x.html <span style="color:#f92672">{</span>
+        root   /usr/share/nginx/html;
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h4 id="232docker部署nginx项目">2.3.2	docker部署nginx项目</h4>
+<p>写了一个shell文件来简化前端vue项目修改后的部署。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo docker stop reader_front
+sudo docker container prune
+sudo docker image rm mnginx
+sudo docker build -t mnginx .
+sudo docker run --name reader_front -p 8080:80 -d mnginx
+sudo docker ps -a
+</code></pre></div><h4 id="233docker部署springboot2项目">2.3.3	docker部署springboot2项目</h4>
+<p>注释如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">//将转储的sql文件复制到容器文件中，注意不是复制到文件夹中
+sudo docker cp /../book.sql mymysql:/home/tmp/book.sql
+
+//登录容器  mysql -uroot -pyzsby123 为同时登录mysql
+docker exec -it mymysql<span style="color:#f92672">(</span>容器名<span style="color:#f92672">)</span> mysql -uroot -pyzsby123
+
+//使用数据库名,如未出创建需先创建
+use readerdev;
+
+//导入执行sql文件
+source /home/tmp/book.sql;
+
+//制作镜像  （该目录包含jar和dockfile）
+docker build -t readerdev .
+
+//运行镜像
+sudo docker run --link mymysql:mymysql --name<span style="color:#f92672">=</span>readerdev -p 8443:8443 -di readerdev
+
+//跨容器通信、与宿主机映射
+//--link   容器名:别名  mymysql:mymysql	容器间通信
+//-v       /home/ubuntu/readerdev/imgs:/home/ubuntu/readerdev/imgs    与宿主机绝对路径映射
+//-p       8443:8443	与宿主机端口映射
+//-d 	   -detach 在后台运行
+sudo docker run --link mymysql:mymysql -v /home/ubuntu/readerdev/imgs:/home/ubuntu/readerdev/imgs --name<span style="color:#f92672">=</span>readerdev -p 8443:8443 -di readerdev
+</code></pre></div><h2 id="三项目总结">三、项目总结</h2>
+<blockquote>
+<p>暂时没有绑定域名，此时可以通过访问http://ip:port/进行访问。</p>
+</blockquote>
+<p>通过本次的结业作业，大概了解了前后端分离项目开发部署的流程，也是我的第一个Web项目。开发时也踩过很多坑，比如说springboot中的上传路径问题，vue组件通信问题、Dockerfile、nginx配置问题和vue项目打包优化等。但也收获了许多，如在vue项目打包时采用cdn的方式大大减小了项目体积，浏览速度加快。</p>
+<p>但同时也存在了很多不足，比如选择了 optional api 而没有采用vue3 推出的 composition api的方式以及代码逻辑混乱、可复用性差等问题，后来在修改一些组件时非常耗时。</p>
+<p>希望下一次的web项目能在此基础上有所提高！😆</p>
+
+</div>
+
+        </div><div id="footer" class="mb-5">
+    <hr>
+    <div class="container text-center">
+        
+            <a href="https://github.com/shanacean" class="fab fa-github fa-1x" title="Github"></a>
+        
+            <a href="mailto:bangyangdan@gmail.com" class="fas fa-envelope fa-1x" title="Gmail"></a>
+        
+    </div>
+    
+</div>
+</body>
+</html>

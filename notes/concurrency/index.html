@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang=""><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Concurrency</title>
+    <meta name="description" content="A simple monospaced resume theme for Hugo.">
+    <meta name="author" content='Bangyang Shan'>
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous">
+    
+    
+    
+    
+
+    
+    <link rel="stylesheet" href="/sass/researcher.min.css">
+
+    
+
+    
+        
+    
+</head>
+
+    <body><div class="container mt-5">
+    <nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
+        <a class="navbar-brand mx-0 mr-sm-auto" href="https://shanacean.github.io/" title="Bangyang Shan">
+          
+          Bangyang Shan
+        </a>
+        <div class="navbar-nav flex-row flex-wrap justify-content-center">
+            
+                
+                
+                    <a class="nav-item nav-link" href="/" title="About">
+                        About
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/notes" title="Notes">
+                        Notes
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/reading" title="Reading">
+                        Reading
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/tags" title="Tags">
+                        Tags
+                    </a>
+                    
+                
+            
+        </div>
+    </nav>
+</div>
+<hr>
+<div id="content">
+<div class="container">
+    <h2 id="concurency">Concurency</h2>
+<p>4个重要概念:</p>
+<ul>
+<li>A <strong>critical section</strong> is a piece of code that accesses a shared resource,
+usually a variable or data structure.</li>
+<li>A <strong>race condition</strong> (or data race [NM92]) arises if multiple threads of
+execution enter the critical section at roughly the same time; both
+attempt to update the shared data structure, leading to a surprising
+(and perhaps undesirable) outcome.</li>
+<li>An <strong>indeterminate</strong> program consists of one or more race conditions;
+the output of the program varies from run to run, depending on
+which threads ran when. The outcome is thus not deterministic,
+something we usually expect from computer systems.</li>
+<li>To avoid these problems, threads should use some kind of <strong>mutual
+exclusion</strong> primitives; doing so guarantees that only a single thread
+ever enters a critical section, thus avoiding races, and resulting in
+deterministic program outputs.</li>
+</ul>
+<h3 id="how-to-build-a-lock">How to build a Lock</h3>
+<p>attempt 1: 使用系统中断调用(对于single-processor system是可行的)
+优点: 简单<br>
+缺点: 无法在multiprocessors使用, 某个线程可能会恶意占用critical section不退出, 滥用系统中断调用, 效率低&hellip;&hellip;</p>
+<pre><code>void lock() {
+  DisableInterrupts();
+}
+
+void unlock() {
+  EnableInterrupts();
+}
+</code></pre><blockquote>
+<p>For these reasons, turning off interrupts is only used in limited contexts as a mutual-exclusion primitive.</p>
+</blockquote>
+<hr>
+<p>attempt 2:  使用单标志位(错误见下图)<br>
+单标志不仅是错误的，同时性能上也很差，存在spin_wait。
+<img src="/system/a_simple_flag.jpg" alt="a_simple_flag"></p>
+<pre><code>typedef struct __lock_t { int flag; } lock_t;
+void init(lock_t* mutex) {
+  mutex-&gt;flag = 0;
+}
+
+void lock(lock_t* mutex) {
+  while (mutex-&gt;flag == 1) ;
+  mutex-&gt;flag = 1;
+}
+
+void unlock(lock_t* mutex) {
+  mutex-&gt;flag = 0;
+}
+</code></pre><hr>
+<p>attempt 3: 利用硬件实现的Test-And-Set机制。</p>
+<ul>
+<li>1、当critical section未被抢占时，当前线程call TestAndSet得到返回值为0，可以获得该锁。</li>
+<li>2、当critical section已经被另一线程抢占时，当前线程想要call TestAndSet时会将<code>*old_ptr = 1</code>，但是由于已经被抢占了，返回的值为1，此时spin-wait(while循环调用，但是返回值一直为1)，直到另一线程unlock。</li>
+</ul>
+<p>效果：correctness, fairness, performance?<br>
+正确的。
+由于是抢占式的，可能存在线程一直spin-wait。
+这依赖于single CPU/multiple CPUs，single cpu情况下，critical section被抢占情况下，任何其它线程都需要spin一次。</p>
+<pre><code>// c伪代码实现硬件过程
+int TestAndSet(int *old_ptr, int new) {
+  int old = *old_ptr;
+  *old_ptr = new;
+  return old;
+}
+
+typedef struct __lock_t { int flag; } lock_t;
+
+void lock(lock_t* mutex) {
+  while (TestAndSet(&amp;lock_t-&gt;flag, 1) == 1) ;
+}
+</code></pre><hr>
+<p>attemp4：Compare-And-Swap
+c伪代码如下，机制与Test-And-Set相似。</p>
+<pre><code>int CompareAndSwap(int *ptr, int expected, int new) {
+  int original = *ptr;
+  if (original == expected)  *ptr = new;
+  return original;
+}
+
+void lock(lock_t* mutex) {
+  while (CompareAndSwap(&amp;lock_t-&gt;flag, 0, 1) == 1) ;
+}
+</code></pre><h2 id="how-to-avoid-spining">How to avoid spining</h2>
+<p>假设thread0获取了锁，那么其余想要访问critical section的线程会一直spin直到消耗完time slice，效率低。</p>
+<p>attempt 1： 利用系统调用yield释放CPU资源<br>
+考虑RR scheduler，尽管其余线程被调度时都会yield，每次切换线程的开销也非常大。</p>
+<pre><code>void lock()  {
+  while (TestAndSet(&amp;flag, 1) == 1)
+    yield();
+}
+</code></pre><p>attempt 2：queue、TestAndSet、yield and wakeup</p>
+
+</div>
+
+        </div><div id="footer" class="mb-5">
+    <hr>
+    <div class="container text-center">
+        
+            <a href="https://github.com/shanacean" class="fab fa-github fa-1x" title="Github"></a>
+        
+            <a href="mailto:bangyangdan@gmail.com" class="fas fa-envelope fa-1x" title="Gmail"></a>
+        
+    </div>
+    
+</div>
+</body>
+</html>

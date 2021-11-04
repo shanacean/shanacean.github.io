@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>go on Bangyang Shan</title>
+    <link>https://shanacean.github.io/tags/go/</link>
+    <description>Recent content in go on Bangyang Shan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Aug 2021 09:04:21 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Interfaces</title>
+      <link>https://shanacean.github.io/notes/interfaces/</link>
+      <pubDate>Thu, 12 Aug 2021 09:04:21 +0800</pubDate>
+      
+      <guid>https://shanacean.github.io/notes/interfaces/</guid>
+      <description>使用net/http包中handler时，handler的函数签名为func(ResponseWriter, *Request)，分别为传值和指针。在SO上找到了相关问题:
+[In Go HTTP handlers, why is the ResponseWriter a value but the Request a pointer?]
+ResponseWriter是一个interface，而request是一个具体的struct。
+type response 实现了ResponseWtriter的方法，但对外部不可见。
+Interface value Interface value是一种类型. 和C++一样，Go使用了method tables记录该接口所包含的方法，不同点在于c++是通过编译期确定，而Go在运行时计算。
+Interface value由两个指针组成，一个指向值对应的数据，另一个指向类型信息。
+type Stringer interface { String() string } type Binary uint64 func (b Binary) String() string { return strconv.FormatUint(b.Get(), 10) } func (b Binary) Get() uint64 { return uint64(b) } A pointer to interface 当一个函数签名为a pointer to interface时，无法使用interface声明的方法。
+type SomeInterface interface { sayHello() } func doSomething(i *SomeInterface) { i.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang=""><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Interfaces</title>
+    <meta name="description" content="A simple monospaced resume theme for Hugo.">
+    <meta name="author" content='Bangyang Shan'>
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous">
+    
+    
+    
+    
+
+    
+    <link rel="stylesheet" href="/sass/researcher.min.css">
+
+    
+
+    
+        
+    
+</head>
+
+    <body><div class="container mt-5">
+    <nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
+        <a class="navbar-brand mx-0 mr-sm-auto" href="https://shanacean.github.io/" title="Bangyang Shan">
+          
+          Bangyang Shan
+        </a>
+        <div class="navbar-nav flex-row flex-wrap justify-content-center">
+            
+                
+                
+                    <a class="nav-item nav-link" href="/" title="About">
+                        About
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/notes" title="Notes">
+                        Notes
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/reading" title="Reading">
+                        Reading
+                    </a>
+                    
+                        <span class="nav-item navbar-text mx-1">/</span>
+                    
+                
+                    <a class="nav-item nav-link" href="/tags" title="Tags">
+                        Tags
+                    </a>
+                    
+                
+            
+        </div>
+    </nav>
+</div>
+<hr>
+<div id="content">
+<div class="container">
+    <p>使用net/http包中handler时，handler的函数签名为<strong>func(ResponseWriter, *Request)</strong>，分别为传值和指针。在SO上找到了相关问题:</p>
+<p>[<a href="https://stackoverflow.com/questions/13255907/in-go-http-handlers-why-is-the-responsewriter-a-value-but-the-request-a-pointer">In Go HTTP handlers, why is the ResponseWriter a value but the Request a pointer?</a>]</p>
+<p>ResponseWriter是一个interface，而request是一个具体的struct。</p>
+<p>type response 实现了ResponseWtriter的方法，但对外部不可见。</p>
+<h2 id="interface-value">Interface value</h2>
+<h3 id="interface-value是一种类型"><em><strong>Interface value</strong></em>是一种类型.</h3>
+<p>和C++一样，Go使用了method tables记录该接口所包含的方法，不同点在于c++是通过编译期确定，而Go在运行时计算。</p>
+<p>Interface value由两个指针组成，一个指向值对应的数据，另一个指向类型信息。</p>
+<p><img src="/gointer2/gointer2.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Stringer</span> <span style="color:#66d9ef">interface</span> {
+	<span style="color:#a6e22e">String</span>() <span style="color:#66d9ef">string</span>
+}
+
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Binary</span> <span style="color:#66d9ef">uint64</span>
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#a6e22e">Binary</span>) <span style="color:#a6e22e">String</span>() <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">FormatUint</span>(<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">Get</span>(), <span style="color:#ae81ff">10</span>)
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#a6e22e">Binary</span>) <span style="color:#a6e22e">Get</span>() <span style="color:#66d9ef">uint64</span> {
+	<span style="color:#66d9ef">return</span> uint64(<span style="color:#a6e22e">b</span>)
+}
+</code></pre></div><h3 id="a-pointer-to-interface"><em><strong>A pointer to interface</strong></em></h3>
+<p>当一个函数签名为a pointer to interface时，无法使用interface声明的方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SomeInterface</span> <span style="color:#66d9ef">interface</span> {
+    <span style="color:#a6e22e">sayHello</span>()
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>(<span style="color:#a6e22e">i</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">SomeInterface</span>) {
+    <span style="color:#a6e22e">i</span>.<span style="color:#a6e22e">sayHello</span>()     <span style="color:#75715e">//error 此时i只是*SomeInterface类型，只实现了empty interface
+</span><span style="color:#75715e"></span>}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSomething</span>(<span style="color:#a6e22e">i</span> <span style="color:#a6e22e">SomeInterface</span>) {
+    <span style="color:#a6e22e">i</span>.<span style="color:#a6e22e">sayHello</span>()	<span style="color:#75715e">//ok
+</span><span style="color:#75715e"></span>}
+</code></pre></div><h3 id="empty-interface"><em><strong>Empty interface</strong></em></h3>
+<p>空接口可以接受任意类型，作为函数参数时，需要进行type switch.</p>
+<hr>
+<p>参考：</p>
+<p><a href="https://research.swtch.com/interfaces">Go Data Structures: Interfaces</a></p>
+
+</div>
+
+        </div><div id="footer" class="mb-5">
+    <hr>
+    <div class="container text-center">
+        
+            <a href="https://github.com/shanacean" class="fab fa-github fa-1x" title="Github"></a>
+        
+            <a href="mailto:bangyangdan@gmail.com" class="fas fa-envelope fa-1x" title="Gmail"></a>
+        
+    </div>
+    
+</div>
+</body>
+</html>
