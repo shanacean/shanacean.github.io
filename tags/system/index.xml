@@ -6,7 +6,25 @@
     <description>Recent content in system on Bangyang Shan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 Sep 2021 10:51:17 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/tags/system/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 23 Dec 2021 19:33:42 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/tags/system/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Shlab</title>
+      <link>https://shanacean.github.io/notes/shlab/</link>
+      <pubDate>Thu, 23 Dec 2021 19:33:42 +0800</pubDate>
+      
+      <guid>https://shanacean.github.io/notes/shlab/</guid>
+      <description>Shell Lab CSAPP Chapter8 Exceptional Control Flow 异常分类:  Trap是用户态向内核请求服务的过程，提供syscall n接口，即系统调用。
+系统为异常分配了唯一的非负整数异常号，系统启动时，操作系统初始化一张异常表，起始地址存放在异常表基址寄存器中。异常处理流程如下:  并发流、并行流:
+ 逻辑流在执行时间上有重叠即为并发流 运行在不同处理器核上的并发流为并行流  pid_t fork(void);
+ 创建父进程的副本，返回两次，若为0则在子进程中，反之在父进程中。 - 共享文件描述符  pid_t waitpid(pid_t pid, int *statusup, int options);
+ 等待进程号为pid的子进程执行结束，waitpid(pid, NULL, 0), statusup、options翻阅man文档 返回值为pid则成功，-1则执行错误  命令行参数、环境变量参数示意图:
+ 全局变量 envrion 指向envp[0]  信号 信号机制基于进程组，每个进程都属于一个进程组
+pid_t getpgrp(void); int setpgrp(pid_t pid, pid_t pgrd);
+ 获取进程组、修改进程组  发送信号:
+int kill(pid_t pid, int sig);
+ pid &amp;gt; 0, sig to pid pid = 0, sig to pids in group of pid pid &amp;lt; 0, sig to pids in |pid|  unsigned int alarm(unsigned int secs);</description>
+    </item>
+    
     <item>
       <title>Tlpi</title>
       <link>https://shanacean.github.io/notes/tlpi/</link>

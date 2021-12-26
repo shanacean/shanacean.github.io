@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="/sass/researcher.min.css">
 
     
+        <link rel="icon" type="image/ico" href="https://shanacean.github.io/img/favicon.ico">
+    
 
     
         
@@ -28,7 +30,7 @@
 
     <body><div class="container mt-5">
     <nav class="navbar navbar-expand-sm flex-column flex-sm-row text-nowrap p-0">
-        <a class="navbar-brand mx-0 mr-sm-auto" href="https://shanacean.github.io/" title="Bangyang Shan">
+        <a class="navbar-brand mx-0 mr-sm-auto" href="https://shanacean.github.io" title="Bangyang Shan">
           
           Bangyang Shan
         </a>
@@ -70,9 +72,83 @@
 <div id="content">
 <div class="container">
     <h2 id="数据链路层">数据链路层</h2>
-<p>实作一： Ethernet帧结构</p>
+<p><strong>实作一: Ethernet帧结构</strong><br></p>
+<p>Wireshark展示的帧中没有FCS(Frame Check Sequence)的原因:<br>
+在Wireshark接受这一帧之前，NIC(network interface card)已经在硬件中处理过FCS。
+详情见: <a href="https://wiki.wireshark.org/Ethernet#:~:text=As%20the%20Ethernet,on%20incoming%20packets.">Wireshark Ethernet Packet format</a></p>
+<p><strong>实作二：子网内/外通信时的 MAC 地址</strong><br>
+<code>ping *****</code>发出帧的目的MAC为00-74-9c-9f-40-13，返回帧的源MAC地址也为00-74-9c-9f-40-13，该MAC地址为教室33号计算机的物理地址。
+<img src="/computer_network/wireshark/ethernet-2-1.jpg" alt=""></p>
+<p><code>ping qige.io</code>发出帧的目的MAC地址为00-74-9c-9f-40-13, 返回帧的源MAC地址也为00-74-9c-9f-40-13，该MAC地址为网关的物理地址。
+<img src="/computer_network/wireshark/ethernet-2-2.jpg" alt=""></p>
+<p><code>ping www.cqjtu.edu.cn</code>发出帧的目的MAC地址为00-74-9c-9f-40-13, 返回帧的源MAC地址也为00-74-9c-9f-40-13，该MAC地址为网关的物理地址。</p>
 <blockquote>
-<p>Wireshark展示的帧中没有FCS(Frame Check Sequence)</p>
+<p>在同一子网之内进行通信，是不需要将网关介入其中，只有当主机个非子网设备进行通信的时候，才需要将数据包全部发给网关设备，再经由网关设备进行转发或者是有路由处理等。<a href="https://en.wikipedia.org/wiki/Gateway_(telecommunications)#:~:text=allows%20data%20to%20flow%20from%20one%20discrete%20network%20to%20another.">GateWay wiki</a></p>
+</blockquote>
+<p><strong>实作三: ARP解析过程</strong><br>
+突然想到手机也有IP，放弃ping机房电脑 😉<br></p>
+<ul>
+<li>Opcode = 1时表示请求，此时目的MAC为ff:ff:ff:ff:ff:ff即广播</li>
+<li>Opcode = 2时表示回应，此时源MAC为手机MAC地址00:74:9c:9f:40:13, 目的MAC为电脑的MAC
+<img src="/computer_network/wireshark/ethernet-3-1.jpg" alt="">
+<img src="/computer_network/wireshark/ethernet-3-2.jpg" alt=""></li>
+</ul>
+<p>根据wireshark抓包可以看到，此次arp请求的目的IP地址为网关，arp回应由网关发送。
+<img src="/computer_network/wireshark/ethernet-3-3.jpg" alt="">
+<img src="/computer_network/wireshark/ethernet-3-4.jpg" alt=""></p>
+<blockquote>
+<p>假使访问非本子网IP不通过网关，那么广播帧会发送到整个网络中，非常混乱。</p>
+</blockquote>
+<hr>
+<h2 id="网络层">网络层</h2>
+<p><strong>实作一: IP包结构</strong><br>
+一个典型的IPv4包结构如下
+<img src="/computer_network/wireshark/IPv4_Packet-en.svg" alt="">
+<img src="/computer_network/wireshark/ip-1.jpg" alt=""></p>
+<blockquote>
+<p>一个IPv4 packet头部中既有header length， 也有total length，方便再传输层中将头部和数据割分开。</p>
+</blockquote>
+<p><strong>实作二: IP包的分段与重组</strong><br>
+<code>ping 202.202.240.16 -l 2000</code> 测试ip包分段重组，由于以太网的MCU为1500字节，所以该数据会分片。</p>
+<p>Flags字段中DF(Don&rsquo;t fragment)是否分片、MF(More fragment)是否为最后一片。<br>
+Fragment Offset标识在数据中的相对位置。
+Fragement Offset为1480是由于首片存在20字节的头部。</p>
+<blockquote>
+<p>ipv6中遇到大数据包会回应ICMP分组太大差错报文，发送方重发数据。
+<img src="/computer_network/wireshark/ip-2-1.jpg" alt="">
+<img src="/computer_network/wireshark/ip-2-2.jpg" alt=""></p>
+</blockquote>
+<p><strong>实作三: TTL事件</strong><br>
+由图示，tracert从本机连续发出3个TTL为1的ICMP数据报，当到达第一个路由器时，路由器返回一个响应超时信息。tracert接收到超时信息将TTL + 1继续发送，遂到达第二个路由器，重复上面的步骤，直到到达目的ip。
+<img src="/computer_network/wireshark/network_3.jpg" alt=""></p>
+<blockquote>
+<p>问题假设收到一个TTL为50的包，大概率经过了64 - 50 = 14跳。</p>
+</blockquote>
+<hr>
+<h2 id="传输层">传输层</h2>
+<p><strong>实作一: 熟悉 TCP 和 UDP 段结构</strong><br>
+<img src="/computer_network/wireshark/transmission-1-1.jpg" alt="">
+<img src="/computer_network/wireshark/transmission-1-2.jpg" alt=""></p>
+<blockquote>
+<p>多路复用，端对端之间应用程序的连接。</p>
+</blockquote>
+<p><strong>实作二: 分析 TCP 建立和释放连接</strong><br>
+三次握手：</p>
+<ul>
+<li>浏览器发送携带[SYN]的报文段</li>
+<li>服务器返回[SYN, ACK]的报文段</li>
+<li>浏览器发送[ACK]的报文段，此时连接建立成功
+<img src="/computer_network/wireshark/transmission-2-1.jpg" alt="">
+四次挥手:</li>
+<li>服务器发送携带[FIN, ACK]的报文段</li>
+<li>浏览器发送携带[ACK]的报文段</li>
+<li>浏览器发送携带[FIN, ACK]的报文段</li>
+<li>服务器发送携带[ACK]报文段
+<img src="/computer_network/wireshark/transmission-2-2.jpg" alt=""></li>
+</ul>
+<blockquote>
+<p>同时建立多个tcp连接可以并发获取数据
+tcp对断开连接优化，如果接收端没有数据发送，可以将第二步-第三步合并。</p>
 </blockquote>
 
 </div>

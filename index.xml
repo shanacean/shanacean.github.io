@@ -8,6 +8,62 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 27 Aug 2021 20:47:31 +0800</lastBuildDate><atom:link href="https://shanacean.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Shlab</title>
+      <link>https://shanacean.github.io/notes/shlab/</link>
+      <pubDate>Thu, 23 Dec 2021 19:33:42 +0800</pubDate>
+      
+      <guid>https://shanacean.github.io/notes/shlab/</guid>
+      <description>Shell Lab CSAPP Chapter8 Exceptional Control Flow 异常分类:  Trap是用户态向内核请求服务的过程，提供syscall n接口，即系统调用。
+系统为异常分配了唯一的非负整数异常号，系统启动时，操作系统初始化一张异常表，起始地址存放在异常表基址寄存器中。异常处理流程如下:  并发流、并行流:
+ 逻辑流在执行时间上有重叠即为并发流 运行在不同处理器核上的并发流为并行流  pid_t fork(void);
+ 创建父进程的副本，返回两次，若为0则在子进程中，反之在父进程中。 - 共享文件描述符  pid_t waitpid(pid_t pid, int *statusup, int options);
+ 等待进程号为pid的子进程执行结束，waitpid(pid, NULL, 0), statusup、options翻阅man文档 返回值为pid则成功，-1则执行错误  命令行参数、环境变量参数示意图:
+ 全局变量 envrion 指向envp[0]  信号 信号机制基于进程组，每个进程都属于一个进程组
+pid_t getpgrp(void); int setpgrp(pid_t pid, pid_t pgrd);
+ 获取进程组、修改进程组  发送信号:
+int kill(pid_t pid, int sig);
+ pid &amp;gt; 0, sig to pid pid = 0, sig to pids in group of pid pid &amp;lt; 0, sig to pids in |pid|  unsigned int alarm(unsigned int secs);</description>
+    </item>
+    
+    <item>
+      <title>Cisco Packet Tracer</title>
+      <link>https://shanacean.github.io/notes/cpt/</link>
+      <pubDate>Wed, 15 Dec 2021 12:45:48 +0800</pubDate>
+      
+      <guid>https://shanacean.github.io/notes/cpt/</guid>
+      <description>直接连接两台PC构建LAN 用交换机构建LAN  pc0可以ping通pc1, 无法ping通pc2、pc3 pc3可以ping通pc2, 无法ping通pc1、pc2 掩码改为255.255.0.0便可以ping通，因为经过掩码运算，此时4台PC处于同一子网192.168.0.0下 二层交换机需要配置网关， 使得两个不同网络之间可以建立连接    集线器与交换机的区别在于，集线器每次都通过广播进行传输，而交换机会维护一个MAC表， 由模拟可验证，hub在第二次ping时仍在广播。  交换机接口地址列表 最初MAC表为空，收到帧时会广播出去。当收到帧时会将源MAC与接收端口做映射记录在MAC表项中。 生成树协议(Spanning Tree Protocol) 如图所示，交换机使用生成树协议使造成环路的两条连接逻辑断开，当减去一条连接时，生成树会自动变化，直到有一条通路。
+路由器初步配置 由于双绞线的最长传输距离为100m， 因而交通大学与重庆大学之间不通过双绞线连接。 配置步骤，关闭路由器、添加WIC-1T，重启通过cli配置。
+ 此时无法跨子网通信式由于路由器还没有转发配置。
+ 静态路由 配置静态路由后，路由可以进行转发，如下图所示跨子网通信成功。  Router(config)#ip route 0.0.0.0 0.0.0.0 ... // 缺省全部转发给 *.*.*.* 这个IP
+ 动态路由RIP 全局配置模式下清除静态路由no ip route 192.168.3.0 255.255.255.0 192.168.2.2
+show ip route可以查看到标记为R的RIP路由 动态路由OSPF 在全局配置模式下使用no router rip清除rip路由
+ 可以在特权模式下使用 debug ip ospf events 开启 OSPF 诊断</description>
+    </item>
+    
+    <item>
+      <title>Wireshark</title>
+      <link>https://shanacean.github.io/notes/wireshark/</link>
+      <pubDate>Wed, 27 Oct 2021 15:07:45 +0800</pubDate>
+      
+      <guid>https://shanacean.github.io/notes/wireshark/</guid>
+      <description>数据链路层 实作一: Ethernet帧结构
+Wireshark展示的帧中没有FCS(Frame Check Sequence)的原因:
+在Wireshark接受这一帧之前，NIC(network interface card)已经在硬件中处理过FCS。 详情见: Wireshark Ethernet Packet format
+实作二：子网内/外通信时的 MAC 地址
+ping *****发出帧的目的MAC为00-74-9c-9f-40-13，返回帧的源MAC地址也为00-74-9c-9f-40-13，该MAC地址为教室33号计算机的物理地址。 ping qige.io发出帧的目的MAC地址为00-74-9c-9f-40-13, 返回帧的源MAC地址也为00-74-9c-9f-40-13，该MAC地址为网关的物理地址。 ping www.cqjtu.edu.cn发出帧的目的MAC地址为00-74-9c-9f-40-13, 返回帧的源MAC地址也为00-74-9c-9f-40-13，该MAC地址为网关的物理地址。
+ 在同一子网之内进行通信，是不需要将网关介入其中，只有当主机个非子网设备进行通信的时候，才需要将数据包全部发给网关设备，再经由网关设备进行转发或者是有路由处理等。GateWay wiki
+ 实作三: ARP解析过程
+突然想到手机也有IP，放弃ping机房电脑 😉
+ Opcode = 1时表示请求，此时目的MAC为ff:ff:ff:ff:ff:ff即广播 Opcode = 2时表示回应，此时源MAC为手机MAC地址00:74:9c:9f:40:13, 目的MAC为电脑的MAC   根据wireshark抓包可以看到，此次arp请求的目的IP地址为网关，arp回应由网关发送。  假使访问非本子网IP不通过网关，那么广播帧会发送到整个网络中，非常混乱。
+  网络层 实作一: IP包结构
+一个典型的IPv4包结构如下  一个IPv4 packet头部中既有header length， 也有total length，方便再传输层中将头部和数据割分开。
+ 实作二: IP包的分段与重组
+ping 202.202.240.16 -l 2000 测试ip包分段重组，由于以太网的MCU为1500字节，所以该数据会分片。
+Flags字段中DF(Don&amp;rsquo;t fragment)是否分片、MF(More fragment)是否为最后一片。
+Fragment Offset标识在数据中的相对位置。 Fragement Offset为1480是由于首片存在20字节的头部。</description>
+    </item>
+    
+    <item>
       <title>Concurrency</title>
       <link>https://shanacean.github.io/notes/concurrency/</link>
       <pubDate>Thu, 21 Oct 2021 13:18:43 +0800</pubDate>
@@ -31,7 +87,7 @@ cmd
     </item>
     
     <item>
-      <title>Ipconfig_ping</title>
+      <title>Ipconfig</title>
       <link>https://shanacean.github.io/notes/ipconfig_ping/</link>
       <pubDate>Wed, 15 Sep 2021 14:16:58 +0800</pubDate>
       
@@ -40,9 +96,9 @@ cmd
 DHCP(Dynamic Host Configuration Protocol)
  用于内部网或网络服务供应商自动分配IP地址给用户 用于内部网管理员对所有电脑作中央管理  Subnet Mask
  用来指明一个IP地址的哪些位标识的是主机所在的网络地址以及哪些位标识的是主机地址的位掩码。  Gateway
- 网关（gateway）能在不同协议间移动资料，而路由器（router）是在不同网络间移动资料，相当于传统所说的IP网关（IP gateway）。   实作二
-Todo:
- Ping  TTL time to live time 往返时间    ping www.baidu.com域名失败原因可能为域名解析失败，解决方法：
+ 网关（gateway）能在不同协议间移动资料，而路由器（router）是在不同网络间移动资料，相当于传统所说的IP网关（IP gateway）。   实作二 MAC、IP地址不同，掩码、网关相同。
+ 当同时连入同一WiFi时，处于同一子网。由ip、掩码 &amp;amp; 运算可得。
+  Ping  TTL time to live time 往返时间    ping www.baidu.com域名失败原因可能为域名解析失败，解决方法：
  清除dns缓存 ipconfig/flushdns 重启网卡 service network restart 或修改host文件添加映射ip-域名映射    Tracert Trace Route
 实作一
  question1
