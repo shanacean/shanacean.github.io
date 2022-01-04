@@ -130,6 +130,167 @@
 端口多路复用使用最多也最灵活。OverLoad 是指不仅改变发向 Internet 数据包的源 IP 地址，同时还改变其源端口，即进行了端口地址转换（PAT，Port Address Translation）。<br>
 采用端口多路复用方式，内部网络的所有主机均可共享一个合法外部 IP 地址实现对 Internet 的访问，从而可以最大限度地节约IP地址资源。 同时，又可隐藏网络内部的所有主机，有效避免来自 Internet 的攻击。因此，目前网络中应用最多的就是端口多路复用方式。</li>
 </ul>
+<p>步骤1：重复OSPF动态路由配置，如图所示，此时可以 <code>ping</code> 通 <code>8.8.8.2</code> 、<code>8.8.8.3</code>
+<img src="/computer_network/cpt/cpt-9-1.jpg" alt=""></p>
+<p>步骤2：在router1上实施访问控制ACL，丢弃<code>192.168.1.0/24</code>的网络包，此时再<code>ping</code>会得到 <strong>Destination host unreachable</strong>信息</p>
+<pre><code>Router&gt;en   // 从普通模式进入特权模式
+Router#conf t   // 进入全局配置模式
+Router(config)#access-list 1 deny 192.168.1.0 0.0.0.255  // 创建 ACL 1，丢弃/不转发来自 192.168.1.0/24 网络的所有包
+Router(config)#access-list 1 permit any  // 添加 ACL 1 的规则，转发其它所有网络的包
+Router(config)#int s0/0   // 配置广域网口
+Router(config-if)#ip access-group 1 in  // 在广域网口上对进来的包实施 ACL 1 中的规则，实际就是广域网口如果收到来自 192.168.1.0/24 IP的包即丢弃
+</code></pre><p><img src="/computer_network/cpt/cpt-9-2.jpg" alt=""></p>
+<p>步骤三：PAT配置，使用<code>show ip nat translations</code> 查看地址翻译过程
+<img src="/computer_network/cpt/cpt-9-3.jpg" alt=""></p>
+<h3 id="虚拟局域网vlan">虚拟局域网VLAN</h3>
+<p>利用持有VLAN功能的交换机来划分VLAN<br>
+下面我们就该交换机的 24 个 100M 接口分为 3 个部分，划分到 3 个不同的 VLAN 中，id 号分别设为 10、20、30，且设置别名（computer、communication、electronic）以利于区分和管理。</p>
+<pre><code>Switch&gt;en
+Switch#conf t
+Switch(config)#vlan 10    // 创建 id 为 10 的 VLAN（缺省的，交换机所有接口都属于VLAN 1，不能使用）
+Switch(config-vlan)#name computer    // 设置 VLAN 的别名
+Switch(config-vlan)#exit
+Switch(config)#int vlan 10    // 该 VLAN 为一个子网，设置其 IP，作为该子网网关
+Switch(config-if)#ip address 192.168.0.1 255.255.255.0
+Switch(config-if)#exit
+Switch(config)#vlan 20    // 创建 id 为 20 的 VLAN
+Switch(config-vlan)#name communication    //设置别名
+Switch(config-vlan)#exit
+Switch(config)#int vlan 20
+Switch(config-if)#ip addr 192.168.1.1 255.255.255.0
+Switch(config-if)#exit
+Switch(config)#vlan 30    // 创建 id 为 20 的 VLAN
+Switch(config-vlan)#name electronic    // 设置别名
+Switch(config-vlan)#exit
+Switch(config)#int vlan 30
+Switch(config-if)#ip add 192.168.2.1 255.255.255.0
+Switch(config-if)#exit
+Switch(config)#int range f0/1-8    // 成组配置接口（1-8）
+Switch(config-if-range)#switchport mode access    // 设置为存取模式
+Switch(config-if-range)#switchport access vlan 10    // 划归到 VLAN 10 中
+Switch(config-if-range)#exit
+Switch(config)#int range f0/9-16
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#exit
+Switch(config)#int range f0/17-24
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#^Z
+Switch#show vlan // 查看 VLAN 的划分情况
+</code></pre><p>此时可以发现只有在相同VLAN下的PC可以相互ping通。
+<img src="/computer_network/cpt/cpt-10.jpg" alt=""></p>
+<p><strong>思考</strong>🤔: 分析一下当前为何不同 VLAN 中的 PC 不能通信？网关在此起什么作用？我们的网关又在何处？如何发起广播测试？<br></p>
+<blockquote>
+<p>如图所示，通过VLAN分割交换机广播域，限制广播帧转发。
+此时网关可以实现vlan间的互通，<strong>是虚拟的？</strong>
+<img src="https://www.practicalnetworking.net/wp-content/uploads/2016/06/vlans-1sw-3vlan.gif" alt=""></p>
+</blockquote>
+<h3 id="vtp">VTP</h3>
+<p>VTP（VLAN Trunk Protocol）即 VLAN 中继协议。VTP 通过 ISL 帧或 Cisco 私有 DTP 帧（可查阅相关资料了解）保持 VLAN 配置统一性，也被称为虚拟局域网干道协议，它是思科私有协议。 VTP 统一管理、增加、删除、调整VLAN，自动地将信息向网络中其它的交换机广播。</p>
+<p>3560 VTP Server 配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">Switch&gt;en
+Switch#conf t
+Switch<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#hostname 3560    // 更改交换机名称（可选）</span>
+3560<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#vtp domain cqjtu   // 设置 VTP 域名称为 cqjtu</span>
+3560<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#vtp mode server    // 设置其为 VTP 服务器模式</span>
+3560<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#vlan 2             // 新建VLAN 2</span>
+3560<span style="color:#f92672">(</span>config-vlan<span style="color:#f92672">)</span><span style="color:#75715e">#name computer // 设置 VLAN 2 的别名（可选）</span>
+3560<span style="color:#f92672">(</span>config-vlan<span style="color:#f92672">)</span><span style="color:#75715e">#exit</span>
+3560<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#vlan 3             // 再建 VLAN 3</span>
+3560<span style="color:#f92672">(</span>config-vlan<span style="color:#f92672">)</span><span style="color:#75715e">#name communication    //设置 VLAN 2 的别名（可选）</span>
+3560<span style="color:#f92672">(</span>config-vlan<span style="color:#f92672">)</span><span style="color:#75715e">#exit</span>
+3560<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#int vlan 2    // 配置接口 VLAN 2，它将是该子网（左边）的网关</span>
+3560<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#ip address 192.168.1.1 255.255.255.0</span>
+3560<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#exit</span>
+3560<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#int vlan 3    // 配置接口 VLAN 3，它将是该子网（右边）的网关</span>
+3560<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#ip address 192.168.2.1 255.255.255.0</span>
+</code></pre></div><p>我们将在左边交换机 2960A 上进行如下工作(右侧2960B同理配置)：</p>
+<ul>
+<li>加入名为 cqjtu 的 VTP 域</li>
+<li>配置与核心交换机 3560 连接的千兆接口 g0/1 为 trunk 模式</li>
+<li>将接口 f0/1 划分到 VLAN 2 中</li>
+<li>将接口 f0/2 划分到 VLAN 3 中
+2960A（左边） VTP Client 配置：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">Switch&gt;en
+Switch#conf t
+Switch<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#hostname 2960A    // 更改交换机名称（可选）</span>
+2960A<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#vtp domain cqjtu   // 加入名为 cqjtu 的 VTP 域</span>
+2960A<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#vtp mode client    // 设置模式为 VTP 客户</span>
+2960A<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#int g0/1    // 配置与核心交换机 3560 连接的 g0/1 千兆接口</span>
+2960A<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#switchport mode trunk    // 设置该接口为中继（trunk）模式</span>
+2960A<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#switchport trunk allowed vlan all  // 允许为所有的 VLAN 中继</span>
+2960A<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#exit</span>
+2960A<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#int f0/1    // 配置接口 1</span>
+2960A<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#switchport mode access    // 设置该接口为正常访问模式</span>
+2960A<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#switchport access vlan 2  // 将接口划分到 VLAN 2</span>
+2960A<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#exit</span>
+2960A<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span><span style="color:#75715e">#int f0/2    // 配置接口 2</span>
+2960A<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#switchport mode access    // 设置该接口为正常访问模式</span>
+2960A<span style="color:#f92672">(</span>config-if<span style="color:#f92672">)</span><span style="color:#75715e">#switchport access vlan 3  // 将接口划分到 VLAN 3</span>
+</code></pre></div><p><em>可以通过<code>show vtp status</code>命令查看VTP状态, <code>show vlan</code>查看vlan状态</em></p>
+<blockquote>
+<p>使用PC0 <code>ping</code> PC1失败，<code>ping</code> PC2成功，即使同一交换机下，处于不同VLAN的机器也无法<code>ping</code>通。<br>
+PC0、PC1的以太网接口已经被划分到了不同VLAN下。
+<img src="/computer_network/cpt/cpt-11.jpg" alt=""></p>
+</blockquote>
+<h3 id="vlan间通信">VLAN间通信</h3>
+<p>VTP 只是给我们划分和管理 VLAN 提供了方便，由上面的测试得知，目前我们仍然不能在 VLAN 间通信。
+因为默认的，VLAN 间是不允许进行通信，此时我们需要所谓的独臂路由器在 VLAN 间为其进行转发！
+我们使用的核心交换机 3560 是个 3 层交换机，可工作在网络层，也称路由交换机，即具有路由功能，能进行这种转发操作。<br></p>
+<p>此时再跨VLAN由PC0 <code>ping</code> PC1成功
+<img src="/computer_network/cpt/cpt-12.jpg" alt=""></p>
+<blockquote>
+<p>独臂路由存在性能瓶颈，实际应用中使用三层交换机(1次路由多次交换)。<br>
+在广域网中,当然跑的都是3层数据包(被路由的),而路由需要确定每次源到目的的最优路径,每次都要重新进行选择,而如果使用3层交换机,就可以第一次进行源到目的的路由,3层交换机会将此数据转到2层,那么下次无论是目的到源,还是源到目的都是进行快速交换.</p>
+</blockquote>
+<h3 id="dhcpdns及web服务器简单配置">DHCP、DNS及Web服务器简单配置</h3>
+<p>服务器 Server 同时作为 DHCP、DNS 以及 Web 服务器，各客户机无需配置，将自动获取网络配置。<br></p>
+<p>设置服务器Server-PT的静态 IP 地址为 19.89.6.4/24，然后选择 Service 进行如下相关配置：</p>
+<table>
+<thead>
+<tr>
+<th>机器名</th>
+<th>配置项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Server</td>
+<td>HTTP</td>
+<td>ON</td>
+</tr>
+<tr>
+<td>Sever</td>
+<td>DNS</td>
+<td>19.89.6.4：www.google.com、www.baidu.com</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>DHCP</td>
+<td>地址池开始地址：19.89.6.10/24，并返回DNS地址</td>
+</tr>
+<tr>
+<td>PC</td>
+<td>网络配置</td>
+<td>自动获取</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/computer_network/cpt/cpt-13-1.jpg" alt="">
+注意在配置DHCP时也要配置其默认DNS服务器。在浏览器中访问 <code>www.baidu.com / www.google.com </code> 都会被DNS服务器解析到<code>19.89.6.4</code>
+<img src="/computer_network/cpt/cpt-13-2.jpg" alt="">
+<img src="/computer_network/cpt/cpt-13-3.jpg" alt=""></p>
+<h3 id="wlan初步配置">WLAN初步配置</h3>
+<p>通过构建如下拓扑的一个家庭 WLAN 来练习一下其相关的配置：</p>
+<blockquote>
+<p>笔记本及台式机默认只有有线网卡，请先关机，在关机状态下删除有线网卡，添加无线网卡，然后再开机。配置成功后，PC0 <code>ping</code> PC1、 Laptop0成功。
+<img src="/computer_network/cpt/cpt-14.jpg" alt=""></p>
+</blockquote>
+<h3 id="实验总结">实验总结</h3>
+<p>通过本次三个实验，学习了有关网络的基本命令行工具、Wireshark基本使用以及CPT模拟网络设备，实践结合理论。</p>
 
 </div>
 

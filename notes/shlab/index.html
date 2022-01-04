@@ -87,12 +87,25 @@
 </ul>
 <p><code>pid_t fork(void);</code></p>
 <ul>
-<li>创建父进程的副本，返回两次，若为0则在子进程中，反之在父进程中。 - 共享文件描述符</li>
+<li>创建父进程的副本，返回两次，若为0则在子进程中，反之在父进程中。</li>
+<li>共享文件描述符</li>
 </ul>
 <p><code>pid_t waitpid(pid_t pid, int *statusup, int options);</code></p>
 <ul>
 <li>等待进程号为pid的子进程执行结束，<code>waitpid(pid, NULL, 0)</code>, statusup、options翻阅man文档</li>
-<li>返回值为pid则成功，-1则执行错误</li>
+<li>status
+<ul>
+<li>WIFEXITED(status): 如果子进程通过调用exit 或者一个返回 (return) 正常终止，就返回真。</li>
+<li>WEXITSTATUS (status): 返回一个正常终止的子进程的退出状态。只有在WIFEXITED() 返回为真时，才会定义这个状态。</li>
+<li>WIFSIGNALED(status): 如果子进程是因为一个未被捕获的信号终止的，那么就返回真。</li>
+<li>WTERMSIG(status): 返回导致子进程终止的信号的编号。只有在WIFSIGNALED() 返回为真时，才定义这个状态。</li>
+<li>WIFSTOPPED(status): 如果引起返回的子进程当前是停止的，那么就返回真。</li>
+<li>WSTOPSIGC(status): 返回引起子进程停止的信号的编号。只有在 WIFSTOPPED返回为真时，才定义这个状态。</li>
+<li>WIFCONTINUED(status): 如果子进程收到 SIGCONT 信号重新启动，则返回真。</li>
+</ul>
+</li>
+<li>return<br>
+如果调用进程没有子进程，那么 waitpid 返回 -1, 并且设置 errno 为 ECHILD 。如果 waitpid 函数被一个信号中断，那么它返回 -1,并设置 errno 为 EINTR 。</li>
 </ul>
 <p>命令行参数、环境变量参数示意图:</p>
 <blockquote>
@@ -102,16 +115,22 @@
 <p><strong>信号</strong>
 信号机制基于进程组，每个进程都属于一个进程组<br></p>
 <p><code>pid_t getpgrp(void);</code>
-<code>int setpgrp(pid_t pid, pid_t pgrd);</code></p>
+<code>int setpgrp(pid_t pid, pid_t pgid);</code></p>
 <ul>
-<li>获取进程组、修改进程组</li>
+<li>获取进程组、修改进程组
+<ul>
+<li>pid = 0 -&gt; pid = current pid</li>
+<li>pgid = 0 -&gt; pgid = pid</li>
+</ul>
+</li>
+<li>setpgrp(0, 0) 将当前pid设置为pgid</li>
 </ul>
 <p>发送信号:<br>
 <code>int kill(pid_t pid, int sig);</code></p>
 <ul>
 <li>pid &gt; 0, sig to pid</li>
 <li>pid = 0, sig to pids in group of pid</li>
-<li>pid &lt; 0, sig to pids in |pid|</li>
+<li>pid &lt; 0, sig to pids where |pid| in</li>
 </ul>
 <p><code>unsigned int alarm(unsigned int secs);</code></p>
 <ul>
@@ -160,49 +179,345 @@ int sigismember(const sigset_t *set, int signum);
 <hr>
 <h3 id="task1">Task1</h3>
 <p>完成trace01、trace02<br>
-根据注释可知，输入的每条指令的过程为 <code>eval</code> -&gt; <code>parseline</code><br>
+根据注释可知，输入的每条指令的过程为 <code>eval</code> -&gt; <code>parseline</code> -&gt; <code>execve</code><br>
 trace01为读取txt至eof结束，样例代码已经实现
 trace02为读取内置quit命令退出，实现如下</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">eval</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>cmdline) {
-  <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[MAXLINE];
-  parseline(cmdline, argv);
-  builtin_cmd(argv);
-  <span style="color:#66d9ef">return</span>;
-}
-
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">builtin_cmd</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">builtin_cmd</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
   <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>strcmp(argv[<span style="color:#ae81ff">0</span>], <span style="color:#e6db74">&#34;quit&#34;</span>))
     exit(<span style="color:#ae81ff">0</span>);
   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>; <span style="color:#75715e">/* not a builtin command */</span>
 }
-</code></pre></div><h3 id="task2">Task2</h3>
-<p>完成trace03验证quit命令。<br>
-对<code>eval</code>代码进行修改。<br>
-遇到非built-in命令，fork一个子进程执行execve命令, environ为全局变量，存储系统环境变量。</p>
+</code></pre></div><h3 id="task2-task3">Task2 Task3</h3>
+<p>完成trace03验证quit命令、trace04验证后台作业。<br>
+代码根据CSAPP 8.4.6修改<br>
+遇到非built-in命令，fork一个子进程执行execve命令, environ为全局变量，存储系统环境变量。<br>
+myspin是根据第一个参数秒数的睡眠程序。</p>
 <blockquote>
 <p>运行foreground命令时，主程序等待其执行结束再return。</p>
 </blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">eval</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>cmdline) {
-  <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[MAXLINE];
-  <span style="color:#66d9ef">int</span> pid;
-  <span style="color:#66d9ef">int</span> bg;
+  <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[MAXARGS]; <span style="color:#75715e">/* Argument list execve() */</span>
+  <span style="color:#66d9ef">char</span> buf[MAXLINE];   <span style="color:#75715e">/* Holds modified command line */</span>
+  <span style="color:#66d9ef">int</span> bg;              <span style="color:#75715e">/* Should the job run in bg or fg */</span>
+  pid_t pid;           <span style="color:#75715e">/* Process id */</span>
 
-  bg <span style="color:#f92672">=</span> parseline(cmdline, argv);
+  strcpy(buf, cmdline);
+  bg <span style="color:#f92672">=</span> parseline(buf, argv);
+  <span style="color:#66d9ef">if</span> (argv[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> NULL)
+    <span style="color:#66d9ef">return</span>; <span style="color:#75715e">/* Ignore empty lines */</span>
+
   <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>builtin_cmd(argv)) {
-    <span style="color:#66d9ef">if</span> ((pid <span style="color:#f92672">=</span> fork()) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
-      <span style="color:#66d9ef">if</span> (execve(argv[<span style="color:#ae81ff">0</span>], argv, environ) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
-        unix_error(<span style="color:#e6db74">&#34;execv&#34;</span>);
+    <span style="color:#66d9ef">if</span> ((pid <span style="color:#f92672">=</span> fork()) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) { <span style="color:#75715e">/* Child runs user job */</span>
+      <span style="color:#66d9ef">if</span> (execve(argv[<span style="color:#ae81ff">0</span>], argv, environ) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+        unix_error(<span style="color:#e6db74">&#34;execve: &#34;</span>);
+      }
     }
+
+    addjob(jobs, pid, bg <span style="color:#f92672">?</span> BG : FG, cmdline);
+    <span style="color:#75715e">/* Parent waits for foreground job to terminate */</span>
     <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>bg) {
-      <span style="color:#66d9ef">if</span> (waitpid(pid, NULL, <span style="color:#ae81ff">0</span>) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
-        unix_error(<span style="color:#e6db74">&#34;waitpid&#34;</span>);
+      <span style="color:#66d9ef">int</span> status;
+      <span style="color:#66d9ef">if</span> (waitpid(pid, <span style="color:#f92672">&amp;</span>status, <span style="color:#ae81ff">0</span>) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+        unix_error(<span style="color:#e6db74">&#34;waitfg: waitpid error&#34;</span>);
+    } <span style="color:#66d9ef">else</span>
+      printf(<span style="color:#e6db74">&#34;[%d] (%d) %s&#34;</span>, pid2jid(pid), pid, cmdline);
+  }
+  <span style="color:#66d9ef">return</span>;
+}
+</code></pre></div><p>main函数中已经为我们注册好4个信号.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">/* These are the ones you will need to implement */</span>
+Signal(SIGINT, sigint_handler);   <span style="color:#75715e">/* ctrl-c */</span>
+Signal(SIGTSTP, sigtstp_handler); <span style="color:#75715e">/* ctrl-z */</span>
+Signal(SIGCHLD, sigchld_handler); <span style="color:#75715e">/* Terminated or stopped child */</span>
+
+<span style="color:#75715e">/* This one provides a clean way to kill the shell */</span>
+Signal(SIGQUIT, sigquit_handler);
+</code></pre></div><p>测试过程中发现跟make rtest4/5有出入，根据pdf文档描述，需要解决jobs回收问题。</p>
+<blockquote>
+<p><strong>hints5</strong><br>
+One of the tricky parts of the assignment is deciding on the allocation of work between the waitfg and sigchld handler functions. We recommend the following approach:</p>
+<ul>
+<li>In waitfg, use a busy loop around the sleep function.</li>
+<li>In sigchld handler, use exactly one call to waitpid.</li>
+</ul>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">waitfg</span>(pid_t pid) {
+  <span style="color:#75715e">// hints5: busy loop
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">while</span> (pid <span style="color:#f92672">==</span> fgpid(jobs))
+    sleep(<span style="color:#ae81ff">1</span>);
+  <span style="color:#66d9ef">return</span>;
+}
+
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">sigchld_handler</span>(<span style="color:#66d9ef">int</span> sig) {
+  pid_t pid;
+  <span style="color:#66d9ef">int</span> status;
+  <span style="color:#75715e">/**   csapp 8.4.3
+</span><span style="color:#75715e">        WNOHANG | WUNTRACED
+</span><span style="color:#75715e">        立即返回，如果等待集合中的子进程都没有被停 止或终止，则返回值为 0;
+</span><span style="color:#75715e">        如果有一个停止或终止，则返回值为该子进程的 PID 。
+</span><span style="color:#75715e">  */</span>
+  <span style="color:#66d9ef">while</span> ((pid <span style="color:#f92672">=</span> waitpid(pid, <span style="color:#f92672">&amp;</span>status, WNOHANG <span style="color:#f92672">|</span> WUNTRACED)) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+    <span style="color:#75715e">// WIFEXITED(status): 如果子进程通过调用 exit 或者一个返回(return ) 正常终
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 止，就返回真。 
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (WIFEXITED(status)) 
+      deletejob(jobs, pid);
+  }
+  <span style="color:#66d9ef">return</span>;
+}
+</code></pre></div><p>根据hints6, 父进程需要在创建子进程前阻塞<code>SIGCHLD</code>信号，防止子进程已经执行结束，在<code>addjob</code>后恢复信号。 由于fork后子进程拷贝了父进程的blocked信号，子进程中也需要恢复。</p>
+<blockquote>
+<p><strong>hints6</strong><br>
+In eval, the parent must use sigprocmask to block SIGCHLD signals before it forks the child, and then unblock these signals, again using sigprocmask after it adds the child to the job list by calling addjob. Since children inherit the blocked vectors of their parents, the child must be sure to then unblock SIGCHLD signals before it execs the new program.<br>
+The parent needs to block the SIGCHLD signals in this way in order to avoid the race condition where the child is reaped by sigchld handler (and thus removed from the job list) before the parent calls addjob.</p>
+</blockquote>
+<p>修改后的eval:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">eval</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>cmdline) {
+  <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[MAXARGS]; <span style="color:#75715e">/* Argument list execve() */</span>
+  <span style="color:#66d9ef">char</span> buf[MAXLINE];   <span style="color:#75715e">/* Holds modified command line */</span>
+  <span style="color:#66d9ef">int</span> bg;              <span style="color:#75715e">/* Should the job run in bg or fg */</span>
+  pid_t pid;           <span style="color:#75715e">/* Process id */</span>
+  sigset_t mask;
+
+  strcpy(buf, cmdline);
+  bg <span style="color:#f92672">=</span> parseline(buf, argv);
+  <span style="color:#66d9ef">if</span> (argv[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> NULL)
+    <span style="color:#66d9ef">return</span>; <span style="color:#75715e">/* Ignore empty lines */</span>
+
+  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>builtin_cmd(argv)) {
+    <span style="color:#75715e">// 初始化
+</span><span style="color:#75715e"></span>    sigemptyset(<span style="color:#f92672">&amp;</span>mask);
+    <span style="color:#75715e">// 添加SIGCHLD到mask集合中
+</span><span style="color:#75715e"></span>    sigaddset(<span style="color:#f92672">&amp;</span>mask, SIGCHLD);
+    <span style="color:#75715e">// 屏蔽mask集合中的信号
+</span><span style="color:#75715e"></span>    sigprocmask(SIG_BLOCK, <span style="color:#f92672">&amp;</span>mask, NULL);
+    <span style="color:#66d9ef">if</span> ((pid <span style="color:#f92672">=</span> fork()) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) { <span style="color:#75715e">/* Child runs user job */</span>
+      <span style="color:#75715e">// 子进程中unblock mask集合
+</span><span style="color:#75715e"></span>      sigprocmask(SIG_UNBLOCK, <span style="color:#f92672">&amp;</span>mask, NULL);
+      <span style="color:#66d9ef">if</span> (execve(argv[<span style="color:#ae81ff">0</span>], argv, environ) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+        unix_error(<span style="color:#e6db74">&#34;execve: &#34;</span>);
+      }
+    }
+
+    addjob(jobs, pid, (bg <span style="color:#f92672">?</span> BG : FG), cmdline);
+    <span style="color:#75715e">// 父进程unblock mask集合
+</span><span style="color:#75715e"></span>    sigprocmask(SIG_UNBLOCK, <span style="color:#f92672">&amp;</span>mask, NULL);
+    <span style="color:#75715e">/* Parent waits for foreground job to terminate */</span>
+    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>bg) {
+      waitfg(pid);
+    } <span style="color:#66d9ef">else</span> {
+      printf(<span style="color:#e6db74">&#34;[%d] (%d) %s&#34;</span>, pid2jid(pid), pid, cmdline);
     }
   }
   <span style="color:#66d9ef">return</span>;
 }
-</code></pre></div><h3 id="task3">Task3</h3>
-<p>完成trace04验证<br></p>
+</code></pre></div><blockquote>
+<p><strong>hint8</strong><br>
+在linux下运行tsh时，tsh运行在一个foreground group中，<code>ctrl c</code>会将<code>SIGINT</code>信号发送个整个group，根据上面笔记可知，<code>setpgid(0, 0)</code>可以将当前进程号设置为gid并切换进程组。
+所以需要在子进程中添一行<code>setpgid(0, 0)</code>。</p>
+</blockquote>
+<h3 id="task6">task6</h3>
+<p>trace06、trace07<br>
+Forward SIGINT to foreground job, 即将<code>crtl + c</code>信号转发给tsh的<strong>前台进程</strong>，fgpid获取前台进程pid。同时需要在<code>sigchld_handler</code>中处理因信号退出产生的status。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#f92672">-</span><span style="color:#66d9ef">void</span> sigint_handler(<span style="color:#66d9ef">int</span> sig) { <span style="color:#66d9ef">return</span>; }
+<span style="color:#f92672">+</span><span style="color:#66d9ef">void</span> sigint_handler(<span style="color:#66d9ef">int</span> sig) {
+<span style="color:#f92672">+</span>  pid_t pid <span style="color:#f92672">=</span> fgpid(jobs);
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">if</span> (pid) {
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">if</span> (kill(<span style="color:#f92672">-</span>pid, SIGINT)) {
+<span style="color:#f92672">+</span>      unix_error(<span style="color:#e6db74">&#34;kill sigint: &#34;</span>);
+<span style="color:#f92672">+</span>    }
+<span style="color:#f92672">+</span>  }
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">return</span>;
+<span style="color:#f92672">+</span>}
 
+<span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">311</span>,<span style="color:#ae81ff">6</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">312</span>,<span style="color:#ae81ff">12</span> <span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#66d9ef">void</span> sigchld_handler(<span style="color:#66d9ef">int</span> sig) {
+     <span style="color:#66d9ef">if</span> (WIFEXITED(status)) { <span style="color:#75715e">/* process terminated normaly */</span>
+       deletejob(jobs, pid);
+     }
+<span style="color:#f92672">+</span>
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">if</span> (WIFSIGNALED(status)) {
+<span style="color:#f92672">+</span>      printf(<span style="color:#e6db74">&#34;Job [%d] (%d) terminated by signal %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, pid2jid(pid), pid,
+<span style="color:#f92672">+</span>             WTERMSIG(status));
+<span style="color:#f92672">+</span>      deletejob(jobs, pid);
+<span style="color:#f92672">+</span>    }
+</code></pre></div><h3 id="task7">task7</h3>
+<p>trace08<br>
+Forward SIGTSTP only to foreground job.
+将<code>SIGTSTP</code>信号转发给前台作业，中断当前作业，流程与task6相似。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">318</span>,<span style="color:#ae81ff">6</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">318</span>,<span style="color:#ae81ff">12</span> <span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#66d9ef">void</span> sigchld_handler(<span style="color:#66d9ef">int</span> sig) {
+              WTERMSIG(status));
+       deletejob(jobs, pid);
+     }
+<span style="color:#f92672">+</span>
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">if</span> (WIFSTOPPED(status)) {
+<span style="color:#f92672">+</span>      printf(<span style="color:#e6db74">&#34;Job [%d] (%d) stopped by signal %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, pid2jid(pid), pid,
+<span style="color:#f92672">+</span>             WSTOPSIG(status));
+<span style="color:#f92672">+</span>      getjobpid(jobs, pid)<span style="color:#f92672">-&gt;</span>state <span style="color:#f92672">=</span> ST;
+<span style="color:#f92672">+</span>    }
+
+<span style="color:#f92672">-</span><span style="color:#66d9ef">void</span> sigtstp_handler(<span style="color:#66d9ef">int</span> sig) { <span style="color:#66d9ef">return</span>; }
+<span style="color:#f92672">+</span><span style="color:#66d9ef">void</span> sigtstp_handler(<span style="color:#66d9ef">int</span> sig) {
+<span style="color:#f92672">+</span>  pid_t pid <span style="color:#f92672">=</span> fgpid(jobs);
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">if</span> (pid) {
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">if</span> (kill(<span style="color:#f92672">-</span>pid, SIGTSTP) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+<span style="color:#f92672">+</span>      unix_error(<span style="color:#e6db74">&#34;kill sigtstp: &#34;</span>);
+<span style="color:#f92672">+</span>  }
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">return</span>;
+<span style="color:#f92672">+</span>}
+
+</code></pre></div><h3 id="task7-1">task7</h3>
+<ul>
+<li>trace09: 实现内建bg命令<br>
+The bg &lt;job&gt; command restarts &lt;job&gt; by sending it a SIGCONT signal, and then runs it in
+the background. The &lt;job&gt; argument can be either a PID or a JID.</li>
+</ul>
+<p>bg参数可以为pid / jid</p>
+<ul>
+<li>第一步：在<code>builtin_cmd</code>中加入bg指令</li>
+<li>第二步：填充<code>do_bgfg()</code>
+<ul>
+<li>解析参数以及参数是否符合<code>bg pid / %jid</code>要求</li>
+<li>根据pid、jid获取job结构体指针</li>
+<li>将<code>SIGCONT</code>信号发送给job所在的进程组</li>
+<li>修改job的state为BG</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">266</span>,<span style="color:#ae81ff">6</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">266</span>,<span style="color:#ae81ff">9</span> <span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#66d9ef">int</span> builtin_cmd(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
+   } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>strcmp(argv[<span style="color:#ae81ff">0</span>], <span style="color:#e6db74">&#34;jobs&#34;</span>)) {
+     listjobs(jobs);
+     <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+<span style="color:#f92672">+</span>  } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>strcmp(argv[<span style="color:#ae81ff">0</span>], <span style="color:#e6db74">&#34;bg&#34;</span>)) {
+<span style="color:#f92672">+</span>    do_bgfg(argv);
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+
+<span style="color:#f92672">+</span><span style="color:#66d9ef">void</span> do_bgfg(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">struct</span> job_t <span style="color:#f92672">*</span>job;
+<span style="color:#f92672">+</span>  <span style="color:#75715e">// 解析参数
+</span><span style="color:#75715e"></span><span style="color:#f92672">+</span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>argv[<span style="color:#ae81ff">1</span>]) {
+<span style="color:#f92672">+</span>    app_error(<span style="color:#e6db74">&#34;lack jid</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+<span style="color:#f92672">+</span>  }
+<span style="color:#f92672">+</span>
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>isdigit(argv[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">&amp;&amp;</span> argv[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;%&#39;</span>) {
+<span style="color:#f92672">+</span>    app_error(<span style="color:#e6db74">&#34;error usage: bg pid/%(jid) &#34;</span>);
+<span style="color:#f92672">+</span>  }
+<span style="color:#f92672">+</span>
+<span style="color:#f92672">+</span>  <span style="color:#75715e">// 判断为pid / jid
+</span><span style="color:#75715e"></span><span style="color:#f92672">+</span>  <span style="color:#66d9ef">int</span> flag <span style="color:#f92672">=</span> isdigit(argv[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">?</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>;
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">if</span> (flag) {
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">int</span> pid <span style="color:#f92672">=</span> atoi(argv[<span style="color:#ae81ff">1</span>]);
+<span style="color:#f92672">+</span>    job <span style="color:#f92672">=</span> getjobpid(jobs, pid);
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>job)
+<span style="color:#f92672">+</span>      app_error(<span style="color:#e6db74">&#34;no such pid&#34;</span>);
+<span style="color:#f92672">+</span>  } <span style="color:#66d9ef">else</span> {
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">int</span> jid <span style="color:#f92672">=</span> atoi(argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+<span style="color:#f92672">+</span>    job <span style="color:#f92672">=</span> getjobjid(jobs, jid);
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>job)
+<span style="color:#f92672">+</span>      app_error(<span style="color:#e6db74">&#34;no such jid&#34;</span>);
+<span style="color:#f92672">+</span>  }
+<span style="color:#f92672">+</span>  <span style="color:#75715e">// 转发信号
+</span><span style="color:#75715e"></span><span style="color:#f92672">+</span>  kill(<span style="color:#f92672">-</span>job<span style="color:#f92672">-&gt;</span>pid, SIGCONT);
+<span style="color:#f92672">+</span>
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>strcmp(argv[<span style="color:#ae81ff">0</span>], <span style="color:#e6db74">&#34;bg&#34;</span>)) {
+<span style="color:#f92672">+</span>    job<span style="color:#f92672">-&gt;</span>state <span style="color:#f92672">=</span> BG;
+<span style="color:#f92672">+</span>    printf(<span style="color:#e6db74">&#34;[%d] (%d) %s&#34;</span>, job<span style="color:#f92672">-&gt;</span>jid, job<span style="color:#f92672">-&gt;</span>pid, job<span style="color:#f92672">-&gt;</span>cmdline);
+<span style="color:#f92672">+</span>  }
+<span style="color:#f92672">+</span>  <span style="color:#66d9ef">return</span>;
+<span style="color:#f92672">+</span>}
+</code></pre></div><ul>
+<li>trace10: 实现内建fg命令
+fg命令实现方式与bg相似，在builtin_cmd中添加fg指令，只是需要<code>waitfg()</code>等待前台进程结束。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">@@ -269,6 +269,9 @@ int builtin_cmd<span style="color:#f92672">(</span>char **argv<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+   <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!strcmp<span style="color:#f92672">(</span>argv<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;bg&#34;</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+     do_bgfg<span style="color:#f92672">(</span>argv<span style="color:#f92672">)</span>;
+     <span style="color:#66d9ef">return</span> 1;
++  <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!strcmp<span style="color:#f92672">(</span>argv<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;fg&#34;</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
++    do_bgfg<span style="color:#f92672">(</span>argv<span style="color:#f92672">)</span>;
++    <span style="color:#66d9ef">return</span> 1;
+   <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!strcmp<span style="color:#f92672">(</span>argv<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;&amp;&#34;</span><span style="color:#f92672">))</span>
+     <span style="color:#66d9ef">return</span> 1;
+   <span style="color:#66d9ef">return</span> 0; /* not a builtin command */
+@@ -308,6 +311,11 @@ void do_bgfg<span style="color:#f92672">(</span>char **argv<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+     job-&gt;state <span style="color:#f92672">=</span> BG;
+     printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;[%d] (%d) %s&#34;</span>, job-&gt;jid, job-&gt;pid, job-&gt;cmdline<span style="color:#f92672">)</span>;
+   <span style="color:#f92672">}</span>
++
++  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!strcmp<span style="color:#f92672">(</span>argv<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;fg&#34;</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
++    job-&gt;state <span style="color:#f92672">=</span> FG;
++    waitfg<span style="color:#f92672">(</span>job-&gt;pid<span style="color:#f92672">)</span>;
++  <span style="color:#f92672">}</span>
+   <span style="color:#66d9ef">return</span>;
+ <span style="color:#f92672">}</span>
+</code></pre></div><h3 id="task8">task8</h3>
+<p>trace11-16验证<br></p>
+<ul>
+<li>trace11: 测试SIGINT是否对前台进程组的进程有效</li>
+<li>trace12: 测试SIGTSTP是否对前台进程组有效</li>
+<li>trace13: 测试restart被<code>SIGTSTP</code>暂停的进程</li>
+</ul>
+<p>unix下执行<code>ps</code>命令中进程STAT状态格式如下:</p>
+<pre><code class="language-PROCESS" data-lang="PROCESS">   Here are the different values that the s, stat and state output specifiers (header &quot;STAT&quot; or &quot;S&quot;) will display to describe the state of a process:
+       D    uninterruptible sleep (usually IO)
+       R    running or runnable (on run queue)
+       S    interruptible sleep (waiting for an event to complete)
+       T    stopped, either by a job control signal or because it is being traced.
+       W    paging (not valid since the 2.6.xx kernel)
+       X    dead (should never be seen)
+       Z    defunct (&quot;zombie&quot;) process, terminated but not reaped by its parent.
+
+       For BSD formats and when the stat keyword is used, additional characters may be displayed:
+       &lt;    high-priority (not nice to other users)
+       N    low-priority (nice to other users)
+       L    has pages locked into memory (for real-time and custom IO)
+       s    is a session leader
+       l    is multi-threaded (using CLONE_THREAD, like NPTL pthreads do)
+       +    is in the foreground process group.
+</code></pre><p>trace14: 错误处理<br>
+自定义用宏打印错误并退出</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#define ERROR_RETURN(msg, ...)                                                 \
+</span><span style="color:#75715e">  do {                                                                         \
+</span><span style="color:#75715e">    printf(msg, ##__VA_ARGS__);                                                \
+</span><span style="color:#75715e">    return;                                                                    \
+</span><span style="color:#75715e">  } while (0)
+</span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">do_bgfg</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
+   <span style="color:#66d9ef">struct</span> job_t <span style="color:#f92672">*</span>job;
+   <span style="color:#66d9ef">if</span> (argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> NULL) {
+<span style="color:#f92672">-</span>    app_error(<span style="color:#e6db74">&#34;lack jid</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+<span style="color:#f92672">+</span>    ERROR_RETURN(<span style="color:#e6db74">&#34;%s command requires PID or %%jobid argument</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, argv[<span style="color:#ae81ff">0</span>]);
+   }
+ 
+   <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>isdigit(argv[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">&amp;&amp;</span> argv[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;%&#39;</span>) {
+<span style="color:#f92672">-</span>    app_error(<span style="color:#e6db74">&#34;error usage: bg pid/%(jid) &#34;</span>);
+<span style="color:#f92672">+</span>    ERROR_RETURN(<span style="color:#e6db74">&#34;%s: argument must be a PID or %%jobid</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, argv[<span style="color:#ae81ff">0</span>]);
+   }
+ 
+   <span style="color:#75715e">// 判断为pid / jid
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">295</span>,<span style="color:#ae81ff">17</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">301</span>,<span style="color:#ae81ff">19</span> <span style="color:#960050;background-color:#1e0010">@@</span> <span style="color:#66d9ef">void</span> do_bgfg(<span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
+   <span style="color:#66d9ef">if</span> (flag) {
+     <span style="color:#66d9ef">int</span> pid <span style="color:#f92672">=</span> atoi(argv[<span style="color:#ae81ff">1</span>]);
+     job <span style="color:#f92672">=</span> getjobpid(jobs, pid);
+<span style="color:#f92672">-</span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>job)
+<span style="color:#f92672">-</span>      app_error(<span style="color:#e6db74">&#34;no such pid&#34;</span>);
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">if</span> (job <span style="color:#f92672">==</span> NULL) {
+<span style="color:#f92672">+</span>      ERROR_RETURN(<span style="color:#e6db74">&#34;(%s): no such process</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, argv[<span style="color:#ae81ff">1</span>]);
+<span style="color:#f92672">+</span>    }
+   } <span style="color:#66d9ef">else</span> {
+     <span style="color:#66d9ef">int</span> jid <span style="color:#f92672">=</span> atoi(argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+     job <span style="color:#f92672">=</span> getjobjid(jobs, jid);
+<span style="color:#f92672">-</span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>job)
+<span style="color:#f92672">-</span>      app_error(<span style="color:#e6db74">&#34;no such jid&#34;</span>);
+<span style="color:#f92672">+</span>    <span style="color:#66d9ef">if</span> (job <span style="color:#f92672">==</span> NULL) {
+<span style="color:#f92672">+</span>      ERROR_RETURN(<span style="color:#e6db74">&#34;%s: No such job</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, argv[<span style="color:#ae81ff">1</span>]);
+<span style="color:#f92672">+</span>    }
+   }
+</code></pre></div><p>trace15: 整合测试<br>
+trace16: 测试从其它进程发出<code>sigint</code> / <code>sigtstp</code>信号对tsh是否有效(见mystop.c)。
+由mytop.c代码可见，其发送SIGTSTP给当前进程组。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">pid <span style="color:#f92672">=</span> getpid();
+<span style="color:#66d9ef">if</span> (kill(<span style="color:#f92672">-</span>pid, SIGTSTP) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+    fprintf(stderr, <span style="color:#e6db74">&#34;kill (tstp) error&#34;</span>);
+</code></pre></div>
 </div>
 
         </div><div id="footer" class="mb-5">
