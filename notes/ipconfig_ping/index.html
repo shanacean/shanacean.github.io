@@ -76,7 +76,7 @@
 <li>/all 显示所有适配器的完整 TCP/IP 配置。</li>
 <li>/flushdns 刷新和重置 DNS 客户端解析程序缓存的内容。</li>
 </ul>
-<p>实作一</p>
+<p><strong>实作一</strong></p>
 <p><em><strong>DHCP(Dynamic Host Configuration Protocol)</strong></em></p>
 <ul>
 <li>用于内部网或网络服务供应商自动分配IP地址给用户</li>
@@ -91,7 +91,7 @@
 <li>网关（gateway）能在不同协议间移动资料，而路由器（router）是在不同网络间移动资料，相当于传统所说的IP网关（IP gateway）。
 <img src="/computer_network/ipconfig_1.jpg" alt=""></li>
 </ul>
-<p>实作二
+<p><strong>实作二</strong>
 MAC、IP地址不同，掩码、网关相同。</p>
 <blockquote>
 <p>当同时连入同一WiFi时，处于同一子网。由ip、掩码 <code>&amp;</code> 运算可得。</p>
@@ -130,17 +130,17 @@ tracert通过TTL实现，每经过一个路由器，TTL - 1，直到为0时返�
 <hr>
 <h2 id="arp">ARP</h2>
 <p>Address Resolution Protocol</p>
-<p>实作一<br>
+<p><strong>实作一</strong>
 <code>arp -d *</code>清除缓存，在ping过某台主机后。
 此时使用<code>arp -a</code>查看可以发现，arp会将其(ip, MAC)键值对保存在缓存中。</p>
-<p>实作二<br>
+<p><strong>实作二</strong>
 使用 <code>arp/?</code>查看更多option</p>
 <ul>
 <li>-s 添加(ip, MAC)静态键值对</li>
 <li>-a / -g 显示arp表</li>
 <li>-d 清除inet_address指定主机</li>
 </ul>
-<p>实作三<br>
+<p><strong>实作三</strong>
 使用 <code>arp -s 192.168.0.1 5c-d9-98-f1-89-64</code> 后再查看，发现arp多出一项。
 <img src="/computer_network/arp_s.jpg" alt=""></p>
 <blockquote>
@@ -151,10 +151,30 @@ arp中的网关信息是由于router代理了arp.<br>
 <hr>
 <h2 id="dhcp">DHCP</h2>
 <p>Dynamic Host Configuration Protocol</p>
+<p><strong>实作一</strong></p>
 <ul>
 <li><code>ipconfig/release</code> 释放所有连接</li>
 <li><code>ipconfig/renew</code> 更新所有适配器</li>
 </ul>
+<blockquote>
+<p>🗣 TroubleShooting<br>
+如果你没能成功的释放，请思考有哪些可能的原因并着手进行解决？</p>
+</blockquote>
+<p>以管理员模式启动。</p>
+<blockquote>
+<p>✎ 问题<br>
+在Windows系统下，如果由于某种原因计算机不能获取 DHCP 服务器的配置数据，那么Windows将会根据某种算法自动配置为 169.254.x.x 这样的 IP 地址。显然，这样的 IP 以及相关的配置信息是不能让我们真正接入 Internet 的，为什么？既然不能接入 Internet，那么Winodws系统采用这样的方案有什么意义？</p>
+</blockquote>
+<ul>
+<li>无法与网关通信</li>
+<li>意义在于使得同一子网下的机器可以通信。</li>
+</ul>
+<blockquote>
+<p>📬 秘籍<br>
+在我校不少地方如教室，计算机都采用了 DHCP 来获得网络配置。假如某天因 DHCP 服务器问题从而不能获得网络配置，那么我们可以查看隔壁教室计算机的配置信息来手动进行网络配置，从而使该计算机能够接入 Internet。
+经常的，在一个固定地方的网络配置我都喜欢采用 静态/手动配置，而不是动态 DHCP 来进行。你能想到是什么原因吗？</p>
+</blockquote>
+<p>手动静态配置避免了频繁进行DHCP请求造成的影响，或是DHCP服务出现问题。</p>
 <hr>
 <h2 id="netstat">netstat</h2>
 <p>Network Statistic</p>
@@ -162,20 +182,103 @@ arp中的网关信息是由于router代理了arp.<br>
 <li><code>C:\WINDOWS\system32\drivers\etc\services</code> 文件存储了常用的端口号分配。</li>
 <li>使用<code>netstat/?</code> 查看网络连接状况option</li>
 </ul>
+<p><strong>实作一、二</strong></p>
+<pre><code># Copyright (c) 1993-2004 Microsoft Corp.
+#
+# This file contains port numbers for well-known services defined by IANA
+#
+# Format:
+#
+# &lt;service name&gt;  &lt;port number&gt;/&lt;protocol&gt;  [aliases...]   [#&lt;comment&gt;]
+#
+
+echo                7/tcp
+echo                7/udp
+discard             9/tcp    sink null
+discard             9/udp    sink null
+systat             11/tcp    users                  #Active users
+systat             11/udp    users                  #Active users
+daytime            13/tcp
+daytime            13/udp
+qotd               17/tcp    quote                  #Quote of the day
+qotd               17/udp    quote                  #Quote of the day
+chargen            19/tcp    ttytst source          #Character generator
+chargen            19/udp    ttytst source          #Character generator
+ftp-data           20/tcp                           #FTP, data
+ftp                21/tcp                           #FTP. control
+</code></pre><p><img src="/computer_network/netstat.jpg" alt=""></p>
 <hr>
 <h2 id="dns">DNS</h2>
 <p>Domain Name System</p>
 <ul>
 <li>部分静态dns被保存在<code>C:\WINDOWS\system32\drivers\etc\hosts</code> 文件中。</li>
+</ul>
+<p><strong>实作一</strong></p>
+<pre><code># Copyright (c) 1993-2009 Microsoft Corp.
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
+
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+127.0.0.1       activate.navicat.com
+
+# GitHub Start
+140.82.113.3      github.com
+140.82.114.20     gist.github.com
+
+151.101.184.133    assets-cdn.github.com
+151.101.184.133    raw.githubusercontent.com
+151.101.184.133    gist.githubusercontent.com
+151.101.184.133    cloud.githubusercontent.com
+151.101.184.133    camo.githubusercontent.com
+151.101.184.133    avatars0.githubusercontent.com
+199.232.68.133     avatars0.githubusercontent.com
+199.232.28.133     avatars1.githubusercontent.com
+151.101.184.133    avatars1.githubusercontent.com
+151.101.184.133    avatars2.githubusercontent.com
+199.232.28.133     avatars2.githubusercontent.com
+151.101.184.133    avatars3.githubusercontent.com
+199.232.68.133     avatars3.githubusercontent.com
+151.101.184.133    avatars4.githubusercontent.com
+199.232.68.133     avatars4.githubusercontent.com
+151.101.184.133    avatars5.githubusercontent.com
+199.232.68.133     avatars5.githubusercontent.com
+151.101.184.133    avatars6.githubusercontent.com
+199.232.68.133     avatars6.githubusercontent.com
+151.101.184.133    avatars7.githubusercontent.com
+199.232.68.133     avatars7.githubusercontent.com
+151.101.184.133    avatars8.githubusercontent.com
+199.232.68.133     avatars8.githubusercontent.com
+
+# GitHub End
+</code></pre><p><strong>实作二</strong></p>
+<ul>
 <li>使用<code>netstat/?</code> 查看网络连接状况option</li>
 <li><code>ipconfig/displaydns</code> 、<code>ipconfig/flushdns</code> 显示清除dns</li>
 </ul>
-<p>nslookup 查询dns记录
+<p><strong>实作三</strong>
+nslookup 查询dns记录
 <img src="/computer_network/dns.jpg" alt=""></p>
 <hr>
 <h2 id="cache">Cache</h2>
 <p>Chrome <code>F12</code> Network面板可以查看被cache的文件。<br>
-size 中显示disk cache、memory cache和未被cache的文件大小。</p>
+size 中显示disk cache、memory cache和未被cache的文件大小。<br>
+<img src="/computer_network/cache.jpg" alt=""></p>
 
 </div>
 
