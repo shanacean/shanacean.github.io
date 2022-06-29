@@ -145,5 +145,14 @@ docker部署vue项目
 //子组件中 handleSuccess(response) { this.url = response //传递上传后返回的图片的链接地址  this.$emit(&amp;#34;onLoadImage&amp;#34;, this.</description>
     </item>
     
+    <item>
+      <title></title>
+      <link>https://shanacean.github.io/notes/trans/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://shanacean.github.io/notes/trans/</guid>
+      <description>The elemental composition and chemical status of the obtainedphotocatalysts was studied by XPS, as exhibited in Figs. 2 and s2.Fig.2a-f is the XPS spectrum of the individual element, including thesignal of C, N,O, Mg, In, and S. The XPS spectrum of C 1s (Fig. 2a) forOCN could be divided into three peaks located at 284.8 ev, 286.45 ev,and 288.0 ev. While in the case of OCM3, these three peaks are at284.</description>
+    </item>
+    
   </channel>
 </rss>

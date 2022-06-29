@@ -517,6 +517,90 @@ trace16: 测试从其它进程发出<code>sigint</code> / <code>sigtstp</code>�
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">pid <span style="color:#f92672">=</span> getpid();
 <span style="color:#66d9ef">if</span> (kill(<span style="color:#f92672">-</span>pid, SIGTSTP) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
     fprintf(stderr, <span style="color:#e6db74">&#34;kill (tstp) error&#34;</span>);
+</code></pre></div><h3 id="拓展题目">拓展题目</h3>
+<h4 id="a2">A2</h4>
+<p>使用vi编辑器编写一段shell文件，取名为mycal实现与Linux中cal命令相当的功能：当输入$mycal[月份名]时，屏幕输出指定年月的日历。<br>
+使用内置cal命令，并且传递两个参数月份、年份。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># mycal_A2.sh</span>
+
+<span style="color:#75715e">#!/bin/bash</span>
+cal $1 $2
+</code></pre></div><h4 id="b3">B3</h4>
+<p>使用vim编辑脚本实现把当前文件目录的信息输出到filedir.txt中。<br>
+使用内置ls命令，通过重定向输出到<code>filedir.txt</code>文件中。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># filedir_B3.sh</span>
+
+<span style="color:#75715e">#!/bin/bash</span>
+ls -la &gt; filedir.txt
+</code></pre></div><h4 id="c1">C1</h4>
+<p>使用vim编写shell脚本实现随机产生10个100以内的整数，并输出其中能被7整除的数。并为其编写一个Makefile文件。
+<img src="/system/shell/c1.jpg" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Makefile</span>
+rand:
+    ./random_C1.sh
+
+<span style="color:#75715e"># random_C1.sh</span>
+<span style="color:#75715e">#!/bin/bash</span>
+<span style="color:#66d9ef">for</span> i in <span style="color:#f92672">{</span>1..10<span style="color:#f92672">}</span>
+<span style="color:#66d9ef">do</span>
+    echo <span style="color:#66d9ef">$(</span>expr $RANDOM % 100<span style="color:#66d9ef">)</span>;
+<span style="color:#66d9ef">done</span>
+</code></pre></div><h4 id="d2">D2</h4>
+<p>利用互斥锁pthread_mutex_t编写互斥访问临界资源的多线程程序。程序完成的功能要求：主函数初始化共享内存变量mv(初值为10)，创建互斥锁，创建两个线程并等待两个线程执行完毕，之后输出mv的值并释放互斥锁；两个线程分别实现通过获取互斥锁的方式完成对内存变量mv自加10次和自减5次的功能。<br></p>
+<blockquote>
+<p>注意返回值检查， mutex通过静态初始化不需要调用pthread_mutex_init();</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;pthread.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;  </span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt; </span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+
+<span style="color:#66d9ef">static</span> pthread_mutex_t mtx <span style="color:#f92672">=</span> PTHREAD_MUTEX_INITIALIZER;
+<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> mv <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">errExit</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> msg) {
+        printf(<span style="color:#e6db74">&#34;%s&#34;</span>, msg);
+        exit(EXIT_FAILURE);
+}
+<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">thread_increment</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>args) {
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">10</span>; i<span style="color:#f92672">++</span>) {
+                <span style="color:#66d9ef">if</span> (pthread_mutex_lock(<span style="color:#f92672">&amp;</span>mtx) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) errExit(<span style="color:#e6db74">&#34;lock error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+                mv<span style="color:#f92672">++</span>;
+                <span style="color:#66d9ef">if</span> (pthread_mutex_unlock(<span style="color:#f92672">&amp;</span>mtx)) errExit(<span style="color:#e6db74">&#34;unlock error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+        }
+        <span style="color:#66d9ef">return</span> NULL;
+}
+
+
+<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">thread_decrement</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>args) {
+        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">5</span>; i<span style="color:#f92672">++</span>) {
+                <span style="color:#66d9ef">if</span> (pthread_mutex_lock(<span style="color:#f92672">&amp;</span>mtx) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) errExit(<span style="color:#e6db74">&#34;lock error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+                mv<span style="color:#f92672">--</span>;
+                <span style="color:#66d9ef">if</span> (pthread_mutex_unlock(<span style="color:#f92672">&amp;</span>mtx)) errExit(<span style="color:#e6db74">&#34;unlock error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+        }
+        <span style="color:#66d9ef">return</span> NULL;
+}
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
+        pthread_t t1, t2;
+        <span style="color:#66d9ef">if</span> (pthread_create(<span style="color:#f92672">&amp;</span>t1, NULL, thread_increment, NULL) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) errExit(<span style="color:#e6db74">&#34;create error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+        <span style="color:#66d9ef">if</span> (pthread_create(<span style="color:#f92672">&amp;</span>t2, NULL, thread_decrement, NULL) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) errExit(<span style="color:#e6db74">&#34;create error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+        <span style="color:#66d9ef">if</span> (pthread_join(t1, NULL) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) errExit(<span style="color:#e6db74">&#34;join error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+        <span style="color:#66d9ef">if</span> (pthread_join(t2, NULL) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) errExit(<span style="color:#e6db74">&#34;join error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+        printf(<span style="color:#e6db74">&#34;mv: %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, mv);
+        <span style="color:#66d9ef">if</span> (pthread_mutex_destroy(<span style="color:#f92672">&amp;</span>mtx) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) errExit(<span style="color:#e6db74">&#34;mutex destroy error.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><h4 id="e2">E2</h4>
+<p>要求编写函数实现以下功能:</p>
+<pre><code>/* Return 1 when any odd bit of x equals 1; 0 otherwise.
+Assume W=32 */
+int any _odd_one (unsigned x);
+</code></pre><p>函数应该遵循位级整数编码规则，不过你可以假设数据类型int有w= 32位.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> any <span style="color:#a6e22e">_odd_one</span>(<span style="color:#66d9ef">unsigned</span> x) {
+    <span style="color:#66d9ef">int</span> odd <span style="color:#f92672">=</span> (<span style="color:#ae81ff">0xaa</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">24</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">0xaa</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">16</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">0xaa</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">0xaa</span>;
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">!</span>((x <span style="color:#f92672">&amp;</span> odd) <span style="color:#f92672">^</span> odd);
+}
 </code></pre></div>
 </div>
 
